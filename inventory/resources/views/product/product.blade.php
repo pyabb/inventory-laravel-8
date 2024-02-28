@@ -31,6 +31,6 @@
 
 @push('script')
 
-<script type="text/javascript" src="{{ url('public/js/product.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/product.js') }}"></script>
 
 @endpush

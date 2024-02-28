@@ -16,8 +16,8 @@
 
 
 -- Volcando estructura de base de datos para db_inventory
-CREATE DATABASE IF NOT EXISTS `db_inventory` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `db_inventory`;
+CREATE DATABASE IF NOT EXISTS `lara5_cbd_inv`
+USE `lara5_cbd_inv`;
 
 -- Volcando estructura para tabla db_inventory.branches
 CREATE TABLE IF NOT EXISTS `branches` (
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `branches` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.branches: ~0 rows (aproximadamente)
-DELETE FROM `branches`;
+DELETE FROM `branches` WHERE id > 0;
 
 -- Volcando estructura para tabla db_inventory.categories
 CREATE TABLE IF NOT EXISTS `categories` (
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.categories: ~20 rows (aproximadamente)
-DELETE FROM `categories`;
+DELETE FROM `categories` WHERE id > 0;
 INSERT INTO `categories` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 	(34, 'Alimentos secos', 1, '2023-04-16 03:14:24', '2023-04-16 03:14:24'),
 	(35, 'Productos enlatados', 1, '2023-04-16 03:14:31', '2023-04-16 03:14:31'),
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `companies` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.companies: ~0 rows (aproximadamente)
-DELETE FROM `companies`;
+DELETE FROM `companies` WHERE id > 0;
 INSERT INTO `companies` (`id`, `name`, `phone`, `address`, `created_at`, `updated_at`) VALUES
 	(1, 'StockInventarios', '9611702915', 'Calle 10 #123, Colonia San Pedro, Ciudad de México, Código Postal 01230.', NULL, '2023-04-17 05:35:09');
 
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
 ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.customers: ~16 rows (aproximadamente)
-DELETE FROM `customers`;
+DELETE FROM `customers` WHERE id > 0;
 INSERT INTO `customers` (`id`, `customer_name`, `email`, `phone`, `address`, `status`, `created_at`, `updated_at`) VALUES
 	(37, 'Juan Pérez', 'juan.perez@example.com', '555-1234', 'Calle 1, Colonia Centro, Ciudad de México', 1, '2023-04-17 02:08:05', '2023-04-17 02:08:05'),
 	(38, 'María Rodríguez', 'maria.rodriguez@example.com', '555-5678', 'Calle 2, Colonia Condesa, Ciudad de México', 1, '2023-04-17 02:08:05', '2023-04-17 02:08:05'),
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `menus` (
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.menus: ~15 rows (aproximadamente)
-DELETE FROM `menus`;
+DELETE FROM `menus` WHERE id > 0;
 INSERT INTO `menus` (`id`, `parent_id`, `name`, `icon`, `menu_url`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 0, 'Clientes', 'contacts', 'customer.index', 0, '2020-07-29 13:17:51', '2020-07-29 13:17:56'),
 	(2, 0, 'Gestión de Productos', 'category', NULL, 0, '2020-07-29 13:17:53', '2020-07-29 13:17:54'),
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.migrations: ~16 rows (aproximadamente)
-DELETE FROM `migrations`;
+DELETE FROM `migrations` WHERE id > 0;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '2014_10_12_000000_create_users_table', 1),
 	(2, '2014_10_12_100000_create_password_resets_table', 1),
@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.password_resets: ~0 rows (aproximadamente)
-DELETE FROM `password_resets`;
+DELETE FROM `password_resets` WHERE 1 = 1;
 
 -- Volcando estructura para tabla db_inventory.payments
 CREATE TABLE IF NOT EXISTS `payments` (
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
 ) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.payments: ~2 rows (aproximadamente)
-DELETE FROM `payments`;
+DELETE FROM `payments` WHERE id > 0;
 INSERT INTO `payments` (`id`, `sell_id`, `customer_id`, `user_id`, `date`, `paid_in`, `bank_information`, `amount`, `created_at`, `updated_at`) VALUES
 	(56, 51, 40, 12, '2023-04-19', 'efectivo', NULL, 412, '2023-04-17 05:34:02', '2023-04-17 05:34:02'),
 	(57, 51, 40, 12, '2023-04-20', 'efectivo', NULL, 0.5, '2023-04-17 05:34:22', '2023-04-17 05:34:22');
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `permissions` (
 ) ENGINE=InnoDB AUTO_INCREMENT=744 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.permissions: ~45 rows (aproximadamente)
-DELETE FROM `permissions`;
+DELETE FROM `permissions` WHERE id > 0;
 INSERT INTO `permissions` (`id`, `role_id`, `menu_id`, `created_at`, `updated_at`) VALUES
 	(124, 5, 1, '2019-02-23 00:54:16', '2019-02-23 00:54:16'),
 	(125, 5, 2, '2019-02-23 00:54:16', '2019-02-23 00:54:16'),
@@ -280,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `products` (
 ) ENGINE=InnoDB AUTO_INCREMENT=236 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.products: ~185 rows (aproximadamente)
-DELETE FROM `products`;
+DELETE FROM `products` WHERE id > 0;
 INSERT INTO `products` (`id`, `category_id`, `product_name`, `details`, `status`, `created_at`, `updated_at`) VALUES
 	(30, 34, 'Arroz blanco de grano largo', 'Este arroz es conocido por su textura suave y delicada, y es ideal para preparar una gran variedad de platos, desde arroz con frijoles hasta sushi. El arroz blanco de grano largo es una excelente fuente de carbohidratos y se puede cocinar fácilmente en una olla de arroz o en una cacerola.', 1, '2023-04-16 03:18:28', '2023-04-16 05:54:34'),
 	(31, 34, 'Frijoles negros envasados al vacío', 'Estos frijoles son una excelente fuente de proteínas y fibra, y son un ingrediente popular en muchos platos tradicionales de la cocina latinoamericana, como los frijoles refritos y el chili con carne. Los frijoles negros envasados al vacío son fáciles de almacenar y se pueden preparar en pocos minutos.', 1, '2023-04-16 03:18:43', '2023-04-16 05:54:52'),
@@ -478,7 +478,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.roles: ~4 rows (aproximadamente)
-DELETE FROM `roles`;
+DELETE FROM `roles` WHERE id > 0;
 INSERT INTO `roles` (`id`, `role_name`, `created_at`, `updated_at`) VALUES
 	(2, 'Superadministrador', '2019-02-12 03:59:54', '2023-04-17 04:53:28'),
 	(3, 'Gerente', '2019-02-13 00:07:41', '2023-04-17 04:35:56'),
@@ -503,7 +503,7 @@ CREATE TABLE IF NOT EXISTS `sells` (
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.sells: ~0 rows (aproximadamente)
-DELETE FROM `sells`;
+DELETE FROM `sells` WHERE id > 0;
 INSERT INTO `sells` (`id`, `user_id`, `customer_id`, `branch_id`, `total_amount`, `paid_amount`, `sell_date`, `discount_amount`, `payment_method`, `payment_status`, `created_at`, `updated_at`) VALUES
 	(51, 12, 40, 1, 412.5, 412.5, '2023-04-17', 0, 2, 1, '2023-04-17 05:33:31', '2023-04-17 05:34:22');
 
@@ -540,7 +540,7 @@ CREATE TABLE IF NOT EXISTS `sell_details` (
 ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.sell_details: ~0 rows (aproximadamente)
-DELETE FROM `sell_details`;
+DELETE FROM `sell_details` WHERE id > 0;
 INSERT INTO `sell_details` (`id`, `stock_id`, `sell_id`, `product_id`, `category_id`, `vendor_id`, `user_id`, `chalan_no`, `selling_date`, `customer_id`, `sold_quantity`, `buy_price`, `sold_price`, `total_buy_price`, `total_sold_price`, `discount`, `discount_type`, `discount_amount`, `created_at`, `updated_at`) VALUES
 	(70, 55, 51, 30, 34, 81, 12, '2023-04-16', '2023-04-17', '40', 33, 9.8, 12.5, 323.40000000000003, 412.5, 0, 1, 0, '2023-04-17 05:33:31', '2023-04-17 05:33:31');
 
@@ -570,7 +570,7 @@ CREATE TABLE IF NOT EXISTS `stocks` (
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.stocks: ~2 rows (aproximadamente)
-DELETE FROM `stocks`;
+DELETE FROM `stocks` WHERE id > 0;
 INSERT INTO `stocks` (`id`, `category_id`, `product_code`, `product_id`, `vendor_id`, `user_id`, `chalan_no`, `buying_price`, `selling_price`, `discount`, `stock_quantity`, `current_quantity`, `note`, `status`, `created_at`, `updated_at`) VALUES
 	(55, 34, '1681681567', 30, 81, 12, '2023-04-16', 9.8, 12.5, 0, 100, 67, NULL, 1, '2023-04-16 22:46:07', '2023-04-17 05:33:31'),
 	(56, 37, '1681705778', 67, 81, 12, '2023-04-16', 189.99, 249.99, 0, 48, 48, NULL, 1, '2023-04-17 05:29:38', '2023-04-17 05:29:38');
@@ -591,7 +591,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.users: ~1 rows (aproximadamente)
-DELETE FROM `users`;
+DELETE FROM `users` WHERE id > 0;
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `branch_id`, `role_id`, `remember_token`, `created_at`, `updated_at`) VALUES
 	(12, 'Diego Carmona Bernal', 'carmonabernaldiego@gmail.com', '$2y$10$W/nqTuN0X.JaGtGBkpw01OTSL0I3aShYL9QusP8Q5kIZ2AviqQHKC', 1, 2, '6zd4CxMA9RCTnuJaxtyhByrBYJsPfV9GtAB4pJE3Ht6YTsIvQ7ETjUVO1jlv', '2020-07-31 17:27:25', '2023-04-17 05:20:18');
 
@@ -608,7 +608,7 @@ CREATE TABLE IF NOT EXISTS `vendors` (
 ) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Volcando datos para la tabla db_inventory.vendors: ~11 rows (aproximadamente)
-DELETE FROM `vendors`;
+DELETE FROM `vendors` WHERE id > 0;
 INSERT INTO `vendors` (`id`, `name`, `phone`, `email`, `address`, `created_at`, `updated_at`) VALUES
 	(76, 'La Michoacana', '55-1234-5678', 'contacto@lamichoacana.com.mx', 'Av. Insurgentes Sur 1647, Col. San José Insurgentes, CDMX', '2023-04-16 21:44:30', '2023-04-16 21:44:30'),
 	(77, 'El Paraiso del Helado', '55-8765-4321', 'info@elparaisodelhelado.com.mx', 'Calle Gral. Emiliano Zapata 54, Col. San Francisco Chilpan, CDMX', '2023-04-16 21:44:30', '2023-04-16 21:44:30'),

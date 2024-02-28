@@ -15,6 +15,6 @@
 
 @push('script')
 
-<script type="text/javascript" src="{{ url('public/js/dashboard.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/dashboard.js') }}"></script>
 
 @endpush

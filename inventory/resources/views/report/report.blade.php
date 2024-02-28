@@ -65,6 +65,6 @@
 
 @push('script')
 
-<script type="text/javascript" src="{{ url('public/js/report.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/report.js') }}"></script>
 
 @endpush
