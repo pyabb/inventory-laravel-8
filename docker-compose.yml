@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+    app:
+        build: inventory
+        container_name: lara5_cbd_inv
+        ports:
+            - "9001:8000"
+        volumes:
+            - ./inventory:/var/www/html
+        networks:
+            - lara5_cbd_inv
+        depends_on:
+            - db
+        command: sh -c "php artisan config:clear && php artisan key:generate && php artisan serve --host 0.0.0.0 --port=8000"
+
+    db:
+        build: db
+        container_name: lara5_cbd_inv_db
+        ports:
+            - "33976:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: password9
+            MYSQL_DATABASE: lara5_cbd_inv
+        volumes:
+            - ./db/app/mysql-data:/var/lib/mysql:rw
+        networks:
+            - lara5_cbd_inv
+
+networks:
+    lara5_cbd_inv:
+        external: true
