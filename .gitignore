@@ -1,0 +1,6 @@
+# docker database
+db/app/*
+
+# phpstorm
+.idea
+
