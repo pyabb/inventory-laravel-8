@@ -28,11 +28,4 @@ RUN addgroup -g 1000 ${USERNAME} \
 #RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 #RUN php -r "unlink('composer-setup.php');"
 
-# Define work directory and copy data
-WORKDIR /var/www/html
-COPY . /var/www/html
-
-# Clone .env file to load enviromnet variblaes into project
-COPY .env.example .env
-
 USER ${USERNAME}
