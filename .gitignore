@@ -1,2 +1,6 @@
-/node_modules
-.env
+# docker database
+db/app/*
+
+# phpstorm
+.idea
+
