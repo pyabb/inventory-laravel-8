@@ -18,3 +18,6 @@ rebuild:
 	make rm
 	make build
 	make up
+
+db.migrate:
+	docker exec ${container} sh -c "import_db.sh"
