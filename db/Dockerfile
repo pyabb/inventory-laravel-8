@@ -8,3 +8,12 @@ ENV TZ=${TIME_ZONE}
 
 RUN cp /usr/share/zoneinfo/America/Lima /etc/localtime
 RUN echo "${TIME_ZONE}" >  /etc/timezone
+
+# Copy migration script
+COPY import_db.sh /usr/local/bin/import_db.sh
+
+# Copy database file into root directory
+COPY inventory.sql .
+
+# Dar permisos de ejecución al script
+RUN chmod +x /usr/local/bin/import_db.sh
