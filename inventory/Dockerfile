@@ -19,13 +19,20 @@ ARG USERNAME=appuser
 RUN addgroup -g 1000 ${USERNAME} \
     && adduser -D -u 1000 -G ${USERNAME} -h /home/${USERNAME} -s /sbin/nologin ${USERNAME}
 
+# If you need to install Composer, uncomment the following lines of code, then update the Composer file hash from:
+# https://getcomposer.org/download/
+
 #ARG COMPOSER_FILE_HASH=dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6
 #RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 #RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '${COMPOSER_FILE_HASH}') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 #RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 #RUN php -r "unlink('composer-setup.php');"
 
+# Define work directory and copy data
 WORKDIR /var/www/html
 COPY . /var/www/html
+
+# Clone .env file to load enviromnet variblaes into project
+COPY .env.example .env
 
 USER ${USERNAME}
