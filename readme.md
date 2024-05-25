@@ -1,4 +1,13 @@
-## Project
+## Project Inventory
+
+## Installation
+
+* [Docker installation](#Docker-installation)
+* [Cpanel installation](#Cpanel-installation)
+* [Xampp installation](#Xampp-installation)
+
+## Docker installation
+
 ### Requirements
 
 Your system needs the following programs:
@@ -56,3 +65,29 @@ If you are using a 'Windows' operating system, please note that sometimes there 
 docker network --prune
 ```
 The above command delete all networks.
+
+## Cpanel installation
+The compressed file does not need any modification, it includes an .htaccess file for the correct functioning of the routes without needing to alter the structure of the original project.
+
+* Download `db.zip` file from `zip_storag` and import in your cpanel database.
+* Download `inventory.zip` file from `zip_storage` directory then uncompressed al content in your `public_html` directory.
+* Edit .env file, replace data for your database credentials:
+
+```dotenv
+APP_NAME=Inventory
+APP_ENV=local
+APP_KEY=base64:yru13Kb0wYKh81NezXu2mR9efx33PrawOgfhQ7XcGKM=
+APP_DEBUG=true
+APP_LOG_LEVEL=debug
+APP_URL=https://yourdomain.site
+
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=pcajkuwd_inventory
+DB_USERNAME=pcajkuwd_root
+DB_PASSWORD=Xl34c574B@3L
+```
+
+## Xampp installation
+...
