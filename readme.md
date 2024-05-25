@@ -73,6 +73,7 @@ The compressed file does not need any modification, it includes an .htaccess fil
   [Download db.zip](https://raw.githubusercontent.com/pyabb/inventory/feature/inv/cpanel_install/zip_storage/db.zip)
 * Download `inventory.zip` file from `zip_storage` directory then uncompressed al content in your `public_html` directory.
   [Download inventory.zip](https://raw.githubusercontent.com/pyabb/inventory/feature/inv/cpanel_install/zip_storage/inventory.zip)
+* In your cpanel set the php version to 7.4. Preferably version ea-7.4 (EasyApache 4).
 * Edit .env file, replace data for your database credentials:
 
 For production mode set `APP_DEBUG` in `false`
