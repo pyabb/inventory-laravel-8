@@ -70,9 +70,9 @@ The above command delete all networks.
 The compressed file does not need any modification, it includes an .htaccess file for the correct functioning of the routes without needing to alter the structure of the original project.
 
 * Download `db.zip` file from `zip_storag` and import in your cpanel database.
-  [Download db.zip](https://raw.github.com/pyabb/inventory/blob/feature/inv/cpanel_install/zip_storage/db.zip)
+  [Download db.zip](https://raw.githubusercontent.com/pyabb/inventory/feature/inv/cpanel_install/zip_storage/db.zip)
 * Download `inventory.zip` file from `zip_storage` directory then uncompressed al content in your `public_html` directory.
-  [Download inventory.zip](https://raw.github.com/pyabb/inventory/blob/feature/inv/cpanel_install/zip_storage/inventory.zip)
+  [Download inventory.zip](https://raw.githubusercontent.com/pyabb/inventory/feature/inv/cpanel_install/zip_storage/inventory.zip)
 * Edit .env file, replace data for your database credentials:
 
 For production mode set `APP_DEBUG` in `false`
