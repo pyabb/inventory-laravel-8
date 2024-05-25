@@ -30,7 +30,11 @@ RUN groupadd -g 1000 ${USERNAME} \
 #RUN php -r "unlink('composer-setup.php');"
 
 WORKDIR /var/www/html
-#COPY . /var/www/html
+
+COPY tmp/node-v6.17.1-linux-x64.tar.xz /tmp
+RUN tar -xJf /tmp/node-v6.17.1-linux-x64.tar.xz -C /usr/local --strip-components=1
+RUN rm /tmp/node-v6.17.1-linux-x64.tar.xz
+RUN node -v && npm -v
 
 # Copy migration script
 COPY init.sh /usr/local/bin/init.sh
