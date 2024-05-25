@@ -30,7 +30,7 @@ Run `make build` command to build the images for app and db containers.
 make build
 ```
 
-Run `make up` command to up the containers.
+Run `make up` command to up the containers if the containers are not active.
 ```shell
 make up
 ```
@@ -40,6 +40,11 @@ Run `make db.migrate container=<db_container_name>` command to migrate database 
 If you need change container name, then you need modify the name in docker compose file.
 ```shell
 make db.migrate container=lara5_cbd_inv_db
+```
+
+Run `make npm.install container=<db_container_name>` command to install npm dependencies
+```shell
+make npm.install container=lara5_cbd_inv_db
 ```
 
 ### Makefile

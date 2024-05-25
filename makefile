@@ -21,3 +21,6 @@ rebuild:
 
 db.migrate:
 	docker exec ${container} sh -c "import_db.sh"
+
+npm.install:
+	docker exec ${container} sh -c "npm install"

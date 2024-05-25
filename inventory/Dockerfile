@@ -1,23 +1,24 @@
-ARG PHP_VERSION=7.4.30-fpm-alpine3.16
+ARG PHP_VERSION=7.4.33-cli-bullseye
 FROM php:${PHP_VERSION}
 
-RUN apk update && apk add tzdata
+RUN apt-get update && apt-get install tzdata
 
 ENV TZ=America/Lima
 
 RUN cp /usr/share/zoneinfo/America/Lima /etc/localtime
 RUN echo "America/Lima" >  /etc/timezone
 
-RUN apk add --no-cache icu-dev libpng-dev freetype-dev libjpeg-turbo-dev zlib-dev libzip-dev
+RUN apt-get install -y libicu-dev libpng-dev libfreetype-dev libjpeg62-turbo-dev libzip-dev
 RUN docker-php-ext-configure intl && docker-php-ext-install intl
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install gd
-RUN docker-php-ext-install zip
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install pdo_mysql
 
 ARG USERNAME=appuser
-RUN addgroup -g 1000 ${USERNAME} \
-    && adduser -D -u 1000 -G ${USERNAME} -h /home/${USERNAME} -s /sbin/nologin ${USERNAME}
+RUN groupadd -g 1000 ${USERNAME} \
+    && useradd -u 1000 -g ${USERNAME} -m -s /sbin/nologin ${USERNAME}
 
 # If you need to install Composer, uncomment the following lines of code, then update the Composer file hash from:
 # https://getcomposer.org/download/
@@ -27,5 +28,18 @@ RUN addgroup -g 1000 ${USERNAME} \
 #RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '${COMPOSER_FILE_HASH}') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 #RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 #RUN php -r "unlink('composer-setup.php');"
+
+WORKDIR /var/www/html
+
+COPY tmp/node-v6.17.1-linux-x64.tar.xz /tmp
+RUN tar -xJf /tmp/node-v6.17.1-linux-x64.tar.xz -C /usr/local --strip-components=1
+RUN rm /tmp/node-v6.17.1-linux-x64.tar.xz
+RUN node -v && npm -v
+
+# Copy migration script
+COPY init.sh /usr/local/bin/init.sh
+
+# Dar permisos de ejecución al script
+RUN chmod +x /usr/local/bin/init.sh
 
 USER ${USERNAME}
