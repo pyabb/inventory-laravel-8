@@ -125,6 +125,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 * The result of your project structure is like:
-  ![](docs/img/structure.png)
+  <br> ![](docs/img/structure.png)
+
 * Run the URL in your web browser `http://localhost`.
 * Enjoy it!
