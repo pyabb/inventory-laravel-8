@@ -98,4 +98,33 @@ DB_PASSWORD=Xl34c574B@3L
 ```
 
 ## Xampp installation
-...
+The project configuration only allows installation in the htdocs folder and not in child folders.
+<br>
+This project only works with version 7.4 of XAMPP. It is recommended to download XAMPP with PHP version 7.4.
+
+* Download `db.zip` file from `zip_storag` and import in your phpmyadmin database.
+  [Download db.zip](https://raw.githubusercontent.com/pyabb/inventory/develop/zip_storage/db.zip)
+* Download `inventory.zip` file from `zip_storage` directory then uncompressed al content in your `htdocs` directory.
+  [Download inventory.zip](https://raw.githubusercontent.com/pyabb/inventory/develop/zip_storage/inventory.zip)
+* Edit .env file, replace for your local credentials:
+
+
+```dotenv
+APP_NAME=Inventory
+APP_ENV=local
+APP_KEY=base64:snRgYbevQFPo68EIDKeUuOTvA1vW3D/M/rm1/8mqC00=
+APP_DEBUG=true
+APP_LOG_LEVEL=debug
+APP_URL=http://localhost/
+
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=lara5_cbd_inv
+DB_USERNAME=root
+DB_PASSWORD=
+```
+* The result of your project structure is like:
+  ![](docs/img/structure.png)
+* Run the URL in your web browser `http://localhost`.
+* Enjoy it!
