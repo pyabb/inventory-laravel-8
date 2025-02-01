@@ -16,8 +16,8 @@
 
 
 -- Volcando estructura de base de datos para db_inventory
-CREATE DATABASE IF NOT EXISTS `lara5_cbd_inv`;
-USE `lara5_cbd_inv`;
+CREATE DATABASE IF NOT EXISTS `inventory`;
+USE `inventory`;
 
 -- Volcando estructura para tabla db_inventory.branches
 CREATE TABLE IF NOT EXISTS `branches` (
