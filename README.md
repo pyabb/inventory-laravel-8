@@ -122,5 +122,3 @@ DB_PASSWORD=
 
 * Run the URL in your web browser `http://localhost`.
 * Enjoy it!
-<br>
-<br> ![](docs/img/dashboard.png)
