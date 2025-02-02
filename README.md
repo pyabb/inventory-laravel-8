@@ -28,11 +28,11 @@ Enter the directory.
 cd <directory name>
 ```
 
-Before running the make commands, you need create a new docker network using the name "inventory-laravel5".
+Before running the make commands, you need create a new docker network using the name "inventory_laravel5".
 <br>
 If you need change de network name, then you need modify the network in docker compose file.
 ```shell
-docker network create inventory-laravel5
+docker network create inventory_laravel5
 ```
 
 Run `make build` command to build the images for app and db containers.
@@ -121,4 +121,7 @@ DB_PASSWORD=
   <br> ![](docs/img/structure.JPG)
 
 * Run the URL in your web browser `http://localhost`.
+* Don't forget the new credentials:
+  * Email: `admin@inventory.org`
+  * Password: `root`
 * Enjoy it!
