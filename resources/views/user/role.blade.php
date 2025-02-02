@@ -46,6 +46,6 @@
 
 @push('script')
 
-<script type="text/javascript" src="{{ url('public/js/role.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/js/role.js') }}"></script>
 
 @endpush

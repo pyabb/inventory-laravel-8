@@ -1,2 +1,11 @@
+# docker database
+db/app/*
+
+# phpstorm
+.idea
+
+# Node
 /node_modules
+
+# Environment variables
 .env
