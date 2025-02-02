@@ -1,17 +1,17 @@
 build:
-	docker-compose build
+	docker compose build
 
 up:
-	docker-compose up -d
+	docker compose up -d
 
 ps:
-	docker-compose ps
+	docker compose ps
 
 stop:
-	docker-compose stop
+	docker compose stop
 
 rm:
-	docker-compose rm -fv
+	docker compose rm -fv
 
 rebuild:
 	make stop

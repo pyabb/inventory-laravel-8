@@ -1,33 +1,34 @@
-version: "3"
-
 services:
     app:
-        build: inventory
-        container_name: lara5_cbd_inv
+        build: .
+        container_name: inventory
         ports:
             - "9001:8000"
         volumes:
-            - ./inventory:/var/www/html
-            - /var/www/html/tmp
+            - .:/var/www/html
         networks:
-            - lara5_cbd_inv
+            - inventory_laravel5
         depends_on:
             - db
         command: 'init.sh'
 
     db:
         build: db
-        container_name: lara5_cbd_inv_db
+        container_name: inventory_db
         ports:
             - "33976:3306"
         environment:
             MYSQL_ROOT_PASSWORD: password9
-            MYSQL_DATABASE: lara5_cbd_inv
+            MYSQL_DATABASE: inventory
         volumes:
-            - ./db/app/mysql-data:/var/lib/mysql:rw
+            - inventory:/var/lib/mysql
         networks:
-            - lara5_cbd_inv
+            - inventory_laravel5
+
+volumes:
+    inventory:
+        driver: local
 
 networks:
-    lara5_cbd_inv:
+    inventory_laravel5:
         external: true

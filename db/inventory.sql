@@ -16,8 +16,8 @@
 
 
 -- Volcando estructura de base de datos para db_inventory
-CREATE DATABASE IF NOT EXISTS `lara5_cbd_inv`;
-USE `lara5_cbd_inv`;
+CREATE DATABASE IF NOT EXISTS `inventory`;
+USE `inventory`;
 
 -- Volcando estructura para tabla db_inventory.branches
 CREATE TABLE IF NOT EXISTS `branches` (
@@ -594,9 +594,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 DELETE FROM `users` WHERE id > 0;
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `branch_id`, `role_id`, `remember_token`, `created_at`, `updated_at`)
 VALUES (
-        12,
-        'Diego Carmona Bernal',
-        'carmonabernaldiego@gmail.com',
+        1,
+        'John Doe',
+        'admin@inventory.org',
         '$2y$10$W/nqTuN0X.JaGtGBkpw01OTSL0I3aShYL9QusP8Q5kIZ2AviqQHKC',
         1,
         2,
