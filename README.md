@@ -73,7 +73,7 @@ This files does not need any modification, it includes an .htaccess file for the
 * Download and import this repository content in your `public_html` directory.
 * Import database using the inventory.sql file from `db` directory to your cpanel database.
 * In your cpanel set the php version to 7.4. Preferably version ea-7.4 (EasyApache 4).
-* Edit .env file, replace for your database credentials:
+* Copy the .env.example file and rename it to .env. Then, update the credentials and settings according to your environment.
 
 For production mode set `APP_DEBUG` in `false`
 
@@ -100,8 +100,7 @@ This project only works with version 7.4 of XAMPP. It is recommended to download
 
 * Download and import this repository content in your `htdocs` directory.
 * Import database using the inventory.sql file from `db` directory to your phpmyadmin database.
-* Edit .env file, replace for your local credentials:
-
+* Copy the .env.example file and rename it to .env. Then, update the credentials and settings according to your environment.
 
 ```dotenv
 APP_NAME=Inventory
