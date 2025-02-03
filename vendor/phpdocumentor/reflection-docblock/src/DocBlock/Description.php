@@ -1,12 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * This file is part of phpDocumentor.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @copyright 2010-2015 Mike van Riel<mike@phpdoc.org>
- * @license   http://www.opensource.org/licenses/mit-license.php MIT
  * @link      http://phpdoc.org
  */
 
@@ -14,7 +15,8 @@ namespace phpDocumentor\Reflection\DocBlock;
 
 use phpDocumentor\Reflection\DocBlock\Tags\Formatter;
 use phpDocumentor\Reflection\DocBlock\Tags\Formatter\PassthroughFormatter;
-use Webmozart\Assert\Assert;
+
+use function vsprintf;
 
 /**
  * Object representing to description for a DocBlock.
@@ -46,28 +48,32 @@ use Webmozart\Assert\Assert;
  * is mainly responsible for rendering.
  *
  * @see DescriptionFactory to create a new Description.
- * @see Description\Formatter for the formatting of the body and tags.
+ * @see Tags\Formatter for the formatting of the body and tags.
  */
 class Description
 {
-    /** @var string */
-    private $bodyTemplate;
+    private string $bodyTemplate;
 
     /** @var Tag[] */
-    private $tags;
+    private array $tags;
 
     /**
      * Initializes a Description with its body (template) and a listing of the tags used in the body template.
      *
-     * @param string $bodyTemplate
      * @param Tag[] $tags
      */
-    public function __construct($bodyTemplate, array $tags = [])
+    public function __construct(string $bodyTemplate, array $tags = [])
     {
-        Assert::string($bodyTemplate);
-
         $this->bodyTemplate = $bodyTemplate;
-        $this->tags = $tags;
+        $this->tags         = $tags;
+    }
+
+    /**
+     * Returns the body template.
+     */
+    public function getBodyTemplate(): string
+    {
+        return $this->bodyTemplate;
     }
 
     /**
@@ -75,7 +81,7 @@ class Description
      *
      * @return Tag[]
      */
-    public function getTags()
+    public function getTags(): array
     {
         return $this->tags;
     }
@@ -83,13 +89,13 @@ class Description
     /**
      * Renders this description as a string where the provided formatter will format the tags in the expected string
      * format.
-     *
-     * @param Formatter|null $formatter
-     *
-     * @return string
      */
-    public function render(Formatter $formatter = null)
+    public function render(?Formatter $formatter = null): string
     {
+        if ($this->tags === []) {
+            return vsprintf($this->bodyTemplate, []);
+        }
+
         if ($formatter === null) {
             $formatter = new PassthroughFormatter();
         }
@@ -104,10 +110,8 @@ class Description
 
     /**
      * Returns a plain string representation of this description.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->render();
     }

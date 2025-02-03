@@ -167,7 +167,7 @@ class Validator implements ValidatorContract
     protected $dependentRules = [
         'RequiredWith', 'RequiredWithAll', 'RequiredWithout', 'RequiredWithoutAll',
         'RequiredIf', 'RequiredUnless', 'Confirmed', 'Same', 'Different', 'Unique',
-        'Before', 'After', 'BeforeOrEqual', 'AfterOrEqual',
+        'Before', 'After', 'BeforeOrEqual', 'AfterOrEqual', 'Gt', 'Lt', 'Gte', 'Lte',
     ];
 
     /**
@@ -175,7 +175,7 @@ class Validator implements ValidatorContract
      *
      * @var array
      */
-    protected $sizeRules = ['Size', 'Between', 'Min', 'Max'];
+    protected $sizeRules = ['Size', 'Between', 'Min', 'Max', 'Gt', 'Lt', 'Gte', 'Lte'];
 
     /**
      * The numeric related validation rules.
@@ -296,7 +296,7 @@ class Validator implements ValidatorContract
     /**
      * Run the validator's rules against its data.
      *
-     * @return void
+     * @return array
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -305,6 +305,12 @@ class Validator implements ValidatorContract
         if ($this->fails()) {
             throw new ValidationException($this);
         }
+
+        $data = collect($this->getData());
+
+        return $data->only(collect($this->getRules())->keys()->map(function ($rule) {
+            return explode('.', $rule)[0];
+        })->unique())->toArray();
     }
 
     /**
@@ -318,7 +324,7 @@ class Validator implements ValidatorContract
     {
         $this->currentRule = $rule;
 
-        list($rule, $parameters) = ValidationRuleParser::parse($rule);
+        [$rule, $parameters] = ValidationRuleParser::parse($rule);
 
         if ($rule == '') {
             return;
@@ -697,7 +703,7 @@ class Validator implements ValidatorContract
         $rules = (array) $rules;
 
         foreach ($this->rules[$attribute] as $rule) {
-            list($rule, $parameters) = ValidationRuleParser::parse($rule);
+            [$rule, $parameters] = ValidationRuleParser::parse($rule);
 
             if (in_array($rule, $rules)) {
                 return [$rule, $parameters];
@@ -1115,7 +1121,7 @@ class Validator implements ValidatorContract
      */
     protected function callClassBasedExtension($callback, $parameters)
     {
-        list($class, $method) = Str::parseCallback($callback, 'validate');
+        [$class, $method] = Str::parseCallback($callback, 'validate');
 
         return call_user_func_array([$this->container->make($class), $method], $parameters);
     }
@@ -1137,6 +1143,8 @@ class Validator implements ValidatorContract
             return $this->callExtension($rule, $parameters);
         }
 
-        throw new BadMethodCallException("Method [$method] does not exist.");
+        throw new BadMethodCallException(sprintf(
+            'Method %s::%s does not exist.', static::class, $method
+        ));
     }
 }

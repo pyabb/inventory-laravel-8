@@ -68,7 +68,7 @@ class Builder
      */
     protected $passthru = [
         'insert', 'insertGetId', 'getBindings', 'toSql',
-        'exists', 'doesntExist', 'count', 'min', 'max', 'avg', 'sum', 'getConnection',
+        'exists', 'doesntExist', 'count', 'min', 'max', 'avg', 'average', 'sum', 'getConnection',
     ];
 
     /**
@@ -152,12 +152,12 @@ class Builder
      */
     public function withoutGlobalScopes(array $scopes = null)
     {
-        if (is_array($scopes)) {
-            foreach ($scopes as $scope) {
-                $this->withoutGlobalScope($scope);
-            }
-        } else {
-            $this->scopes = [];
+        if (! is_array($scopes)) {
+            $scopes = array_keys($this->scopes);
+        }
+
+        foreach ($scopes as $scope) {
+            $this->withoutGlobalScope($scope);
         }
 
         return $this;
@@ -211,8 +211,8 @@ class Builder
      * Add a basic where clause to the query.
      *
      * @param  string|array|\Closure  $column
-     * @param  string  $operator
-     * @param  mixed  $value
+     * @param  mixed   $operator
+     * @param  mixed   $value
      * @param  string  $boolean
      * @return $this
      */
@@ -233,14 +233,14 @@ class Builder
      * Add an "or where" clause to the query.
      *
      * @param  \Closure|array|string  $column
-     * @param  string  $operator
+     * @param  mixed  $operator
      * @param  mixed  $value
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
     public function orWhere($column, $operator = null, $value = null)
     {
-        list($value, $operator) = $this->query->prepareValueAndOperator(
-            $value, $operator, func_num_args() == 2
+        [$value, $operator] = $this->query->prepareValueAndOperator(
+            $value, $operator, func_num_args() === 2
         );
 
         return $this->where($column, $operator, $value, 'or');
@@ -312,7 +312,7 @@ class Builder
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static|static[]
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
@@ -321,7 +321,7 @@ class Builder
         $result = $this->find($id, $columns);
 
         if (is_array($id)) {
-            if (count($result) == count(array_unique($id))) {
+            if (count($result) === count(array_unique($id))) {
                 return $result;
             }
         } elseif (! is_null($result)) {
@@ -612,7 +612,7 @@ class Builder
      *
      * @param  int  $count
      * @param  callable  $callback
-     * @param  string  $column
+     * @param  string|null  $column
      * @param  string|null  $alias
      * @return bool
      */
@@ -622,7 +622,7 @@ class Builder
 
         $alias = is_null($alias) ? $column : $alias;
 
-        $lastId = 0;
+        $lastId = null;
 
         do {
             $clone = clone $this;
@@ -784,7 +784,7 @@ class Builder
      * Increment a column's value by a given amount.
      *
      * @param  string  $column
-     * @param  int  $amount
+     * @param  float|int  $amount
      * @param  array  $extra
      * @return int
      */
@@ -799,7 +799,7 @@ class Builder
      * Decrement a column's value by a given amount.
      *
      * @param  string  $column
-     * @param  int  $amount
+     * @param  float|int  $amount
      * @param  array  $extra
      * @return int
      */
@@ -880,7 +880,7 @@ class Builder
             // the parameter list is empty, so we will format the scope name and these
             // parameters here. Then, we'll be ready to call the scope on the model.
             if (is_int($scope)) {
-                list($scope, $parameters) = [$parameters, []];
+                [$scope, $parameters] = [$parameters, []];
             }
 
             // Next we'll pass the scope callback to the callScope method which will take
@@ -913,7 +913,7 @@ class Builder
                 continue;
             }
 
-            $builder->callScope(function (Builder $builder) use ($scope) {
+            $builder->callScope(function (self $builder) use ($scope) {
                 // If the scope is a Closure we will just go ahead and call the scope with the
                 // builder instance. The "callScope" method will properly group the clauses
                 // that are added to this query so "where" clauses maintain proper logic.
@@ -1085,7 +1085,7 @@ class Builder
             if (is_numeric($name)) {
                 $name = $constraints;
 
-                list($name, $constraints) = Str::contains($name, ':')
+                [$name, $constraints] = Str::contains($name, ':')
                             ? $this->createSelectWithConstraint($name)
                             : [$name, function () {
                                 //
@@ -1306,7 +1306,9 @@ class Builder
         }
 
         if (! isset(static::$macros[$method])) {
-            throw new BadMethodCallException("Method {$method} does not exist.");
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
         }
 
         if (static::$macros[$method] instanceof Closure) {

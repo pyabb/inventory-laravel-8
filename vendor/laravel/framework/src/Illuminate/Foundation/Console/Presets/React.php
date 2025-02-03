@@ -32,8 +32,8 @@ class React extends Preset
     {
         return [
             'babel-preset-react' => '^6.23.0',
-            'react' => '^15.4.2',
-            'react-dom' => '^15.4.2',
+            'react' => '^16.2.0',
+            'react-dom' => '^16.2.0',
         ] + Arr::except($packages, ['vue']);
     }
 
@@ -71,5 +71,6 @@ class React extends Preset
      */
     protected static function updateBootstrapping()
     {
+        copy(__DIR__.'/react-stubs/app.js', resource_path('assets/js/app.js'));
     }
 }

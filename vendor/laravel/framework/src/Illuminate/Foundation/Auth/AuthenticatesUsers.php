@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Session;
 
 trait AuthenticatesUsers
 {
@@ -26,6 +25,8 @@ trait AuthenticatesUsers
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function login(Request $request)
     {
@@ -41,9 +42,7 @@ trait AuthenticatesUsers
         }
 
         if ($this->attemptLogin($request)) {
-            
             return $this->sendLoginResponse($request);
-
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
@@ -103,6 +102,7 @@ trait AuthenticatesUsers
         $request->session()->regenerate();
 
         $this->clearLoginAttempts($request);
+
         return $this->authenticated($request, $this->guard()->user())
                 ?: redirect()->intended($this->redirectPath());
     }
@@ -116,9 +116,7 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-              $side_menu = sideMenu(Auth::user()->role_id);
-              Session::push('side_menu', $side_menu);
-          
+        //
     }
 
     /**
@@ -127,7 +125,7 @@ trait AuthenticatesUsers
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @throws ValidationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function sendFailedLoginResponse(Request $request)
     {
@@ -158,9 +156,18 @@ trait AuthenticatesUsers
 
         $request->session()->invalidate();
 
-        Session::forget('side_menu');
+        return $this->loggedOut($request) ?: redirect('/');
+    }
 
-        return redirect('/');
+    /**
+     * The user has logged out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
+     */
+    protected function loggedOut(Request $request)
+    {
+        //
     }
 
     /**
