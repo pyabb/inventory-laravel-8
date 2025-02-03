@@ -8,10 +8,11 @@ use \TijsVerkoyen\CssToInlineStyles\Css\Property\Processor as PropertyProcessor;
 class Processor
 {
     /**
-     * Split a string into seperate rules
+     * Splits a string into separate rules
      *
      * @param string $rulesString
-     * @return array
+     *
+     * @return string[]
      */
     public function splitIntoSeparateRules($rulesString)
     {
@@ -22,6 +23,7 @@ class Processor
 
     /**
      * @param string $string
+     *
      * @return string
      */
     private function cleanup($string)
@@ -29,8 +31,8 @@ class Processor
         $string = str_replace(array("\r", "\n"), '', $string);
         $string = str_replace(array("\t"), ' ', $string);
         $string = str_replace('"', '\'', $string);
-        $string = preg_replace('|/\*.*?\*/|', '', $string);
-        $string = preg_replace('/\s\s+/', ' ', $string);
+        $string = preg_replace('|/\*.*?\*/|', '', $string) ?? $string;
+        $string = preg_replace('/\s\s+/', ' ', $string) ?? $string;
 
         $string = trim($string);
         $string = rtrim($string, '}');
@@ -39,11 +41,12 @@ class Processor
     }
 
     /**
-     * Convert a rule-string into an object
+     * Converts a rule-string into an object
      *
      * @param string $rule
      * @param int    $originalOrder
-     * @return array
+     *
+     * @return Rule[]
      */
     public function convertToObjects($rule, $originalOrder)
     {
@@ -74,16 +77,18 @@ class Processor
     }
 
     /**
-     * Calculate the specificity based on a CSS Selector string,
+     * Calculates the specificity based on a CSS Selector string,
      * Based on the patterns from premailer/css_parser by Alex Dunae
      *
      * @see https://github.com/premailer/css_parser/blob/master/lib/css_parser/regexps.rb
+     *
      * @param string $selector
+     *
      * @return Specificity
      */
     public function calculateSpecificityBasedOnASelector($selector)
     {
-        $idSelectorsPattern = "  \#";
+        $idSelectorCount = preg_match_all("/  \#/ix", $selector, $matches);
         $classAttributesPseudoClassesSelectorsPattern = "  (\.[\w]+)                     # classes
                         |
                         \[(\w+)                       # attributes
@@ -100,6 +105,7 @@ class Processor
                           |only-child|only-of-type
                           |empty|contains
                         ))";
+        $classAttributesPseudoClassesSelectorCount = preg_match_all("/{$classAttributesPseudoClassesSelectorsPattern}/ix", $selector, $matches);
 
         $typePseudoElementsSelectorPattern = "  ((^|[\s\+\>\~]+)[\w]+       # elements
                         |
@@ -109,16 +115,23 @@ class Processor
                           |selection
                         )
                       )";
+        $typePseudoElementsSelectorCount = preg_match_all("/{$typePseudoElementsSelectorPattern}/ix", $selector, $matches);
+
+        if ($idSelectorCount === false || $classAttributesPseudoClassesSelectorCount === false || $typePseudoElementsSelectorCount === false) {
+            throw new \RuntimeException('Failed to calculate specificity based on selector.');
+        }
 
         return new Specificity(
-            preg_match_all("/{$idSelectorsPattern}/ix", $selector, $matches),
-            preg_match_all("/{$classAttributesPseudoClassesSelectorsPattern}/ix", $selector, $matches),
-            preg_match_all("/{$typePseudoElementsSelectorPattern}/ix", $selector, $matches)
+            $idSelectorCount,
+            $classAttributesPseudoClassesSelectorCount,
+            $typePseudoElementsSelectorCount
         );
     }
 
     /**
-     * @param array $rules
+     * @param string[] $rules
+     * @param Rule[]   $objects
+     *
      * @return Rule[]
      */
     public function convertArrayToObjects(array $rules, array $objects = array())
@@ -133,12 +146,13 @@ class Processor
     }
 
     /**
-     * Sort an array on the specificity element in an ascending way
+     * Sorts an array on the specificity element in an ascending way
      * Lower specificity will be sorted to the beginning of the array
      *
+     * @param Rule $e1 The first element.
+     * @param Rule $e2 The second element.
+     *
      * @return int
-     * @param  Rule $e1 The first element.
-     * @param  Rule $e2 The second element.
      */
     public static function sortOnSpecificity(Rule $e1, Rule $e2)
     {

@@ -20,9 +20,9 @@ class StaticVar extends Node\Stmt
      * @param array          $attributes Additional attributes
      */
     public function __construct(
-        Expr\Variable $var, Node\Expr $default = null, array $attributes = []
+        Expr\Variable $var, ?Node\Expr $default = null, array $attributes = []
     ) {
-        parent::__construct($attributes);
+        $this->attributes = $attributes;
         $this->var = $var;
         $this->default = $default;
     }

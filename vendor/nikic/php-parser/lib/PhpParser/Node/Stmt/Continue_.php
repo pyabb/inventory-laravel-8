@@ -15,8 +15,8 @@ class Continue_ extends Node\Stmt
      * @param null|Node\Expr $num        Number of loops to continue
      * @param array          $attributes Additional attributes
      */
-    public function __construct(Node\Expr $num = null, array $attributes = []) {
-        parent::__construct($attributes);
+    public function __construct(?Node\Expr $num = null, array $attributes = []) {
+        $this->attributes = $attributes;
         $this->num = $num;
     }
 

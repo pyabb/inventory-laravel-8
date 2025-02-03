@@ -21,22 +21,40 @@ use SebastianBergmann\Comparator\ComparisonFailure;
  */
 final class ClosureComparator extends Comparator
 {
-    public function accepts($expected, $actual)
+    /**
+     * @param mixed $expected
+     * @param mixed $actual
+     */
+    public function accepts($expected, $actual): bool
     {
         return is_object($expected) && $expected instanceof \Closure
             && is_object($actual) && $actual instanceof \Closure;
     }
 
-    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false)
+    /**
+     * @param mixed $expected
+     * @param mixed $actual
+     * @param float $delta
+     * @param bool  $canonicalize
+     * @param bool  $ignoreCase
+     */
+    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false): void
     {
-        throw new ComparisonFailure(
-            $expected,
-            $actual,
-            // we don't need a diff
-            '',
-            '',
-            false,
-            'all closures are born different'
-        );
+        if ($expected !== $actual) {
+            // Support for sebastian/comparator < 5
+            if ((new \ReflectionMethod(ComparisonFailure::class, '__construct'))->getNumberOfParameters() >= 6) {
+                // @phpstan-ignore-next-line
+                throw new ComparisonFailure($expected, $actual, '', '', false, 'all closures are different if not identical');
+            }
+
+            throw new ComparisonFailure(
+                $expected,
+                $actual,
+                // we don't need a diff
+                '',
+                '',
+                'all closures are different if not identical'
+            );
+        }
     }
 }

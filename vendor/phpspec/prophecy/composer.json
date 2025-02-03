@@ -1,7 +1,7 @@
 {
     "name":         "phpspec/prophecy",
     "description":  "Highly opinionated mocking framework for PHP 5.3+",
-    "keywords":     ["Mock", "Stub", "Dummy", "Double", "Fake", "Spy"],
+    "keywords":     ["Mock", "Stub", "Dummy", "Double", "Fake", "Spy", "dev"],
     "homepage":     "https://github.com/phpspec/prophecy",
     "type":         "library",
     "license":      "MIT",
@@ -18,33 +18,50 @@
     ],
 
     "require": {
-        "php":                               "^5.3|^7.0",
-        "phpdocumentor/reflection-docblock": "^2.0|^3.0.2|^4.0",
-        "sebastian/comparator":              "^1.1|^2.0|^3.0",
-        "doctrine/instantiator":             "^1.0.2",
-        "sebastian/recursion-context":       "^1.0|^2.0|^3.0"
+        "php":                               "^7.2 || 8.0.* || 8.1.* || 8.2.* || 8.3.* || 8.4.*",
+        "phpdocumentor/reflection-docblock": "^5.2",
+        "sebastian/comparator":              "^3.0 || ^4.0 || ^5.0 || ^6.0",
+        "doctrine/instantiator":             "^1.2 || ^2.0",
+        "sebastian/recursion-context":       "^3.0 || ^4.0 || ^5.0 || ^6.0"
     },
 
     "require-dev": {
-        "phpspec/phpspec": "^2.5|^3.2",
-        "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5 || ^7.1"
+        "friendsofphp/php-cs-fixer": "^3.40",
+        "phpspec/phpspec": "^6.0 || ^7.0",
+        "phpstan/phpstan": "^1.9",
+        "phpunit/phpunit": "^8.0 || ^9.0 || ^10.0"
     },
 
     "autoload": {
-        "psr-0": {
-            "Prophecy\\": "src/"
+        "psr-4": {
+            "Prophecy\\": "src/Prophecy"
         }
     },
 
     "autoload-dev": {
         "psr-4": {
-            "Fixtures\\Prophecy\\": "fixtures"
+            "Fixtures\\Prophecy\\": "fixtures",
+            "Tests\\Prophecy\\": "tests"
         }
+    },
+
+    "scripts": {
+        "cs:check": "@php php-cs-fixer check --verbose --diff",
+        "cs:fix": "@php php-cs-fixer fix",
+        "phpstan": "phpstan analyse",
+        "phpstan:baseline": "phpstan analyse --generate-baseline"
+    },
+
+    "scripts-descriptions": {
+        "cs:check": "Check coding standards",
+        "cs:fix": "Fix coding standards",
+        "phpstan": "Run PHPStan analysis",
+        "phpstan:baseline": "Dump PHPStan baseline file - use only for updating, do not add new errors when possible"
     },
 
     "extra": {
         "branch-alias": {
-            "dev-master": "1.8.x-dev"
+            "dev-master": "1.x-dev"
         }
     }
 }
