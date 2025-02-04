@@ -1,8 +1,8 @@
 require('./vue-asset');
+import CreateVendor from "./components/vendor/CreateVendor.vue";
+import ViewVendor from "./components/vendor/ViewVendor.vue";
 
-Vue.component('create-vendor', require('./components/vendor/CreateVendor.vue'));
-Vue.component('view-vendor', require('./components/vendor/ViewVendor.vue'));
+Vue.component('create-vendor', CreateVendor);
+Vue.component('view-vendor', ViewVendor);
 
-var app = new Vue({
-    el: '#inventory'
-});
+var app = new Vue({el: '#inventory'});

@@ -13,7 +13,6 @@ RUN docker-php-ext-configure intl && docker-php-ext-install intl
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install gd
 
 RUN docker-php-ext-install zip
-RUN docker-php-ext-install mysqli
 RUN docker-php-ext-install pdo_mysql
 
 ARG USERNAME=appuser
@@ -31,10 +30,17 @@ RUN groupadd -g 1000 ${USERNAME} \
 
 WORKDIR /var/www/html
 
-COPY tmp/node-v6.17.1-linux-x64.tar.xz /tmp
-RUN tar -xJf /tmp/node-v6.17.1-linux-x64.tar.xz -C /usr/local --strip-components=1
-RUN rm /tmp/node-v6.17.1-linux-x64.tar.xz
-RUN node -v && npm -v
+# Download and install nvm and node using .tar file:
+COPY tmp/node-v12.22.12-linux-x64.tar.xz /tmp
+RUN tar -xJf /tmp/node-v12.22.12-linux-x64.tar.xz -C /usr/local --strip-components=1
+RUN rm /tmp/node-v12.22.12-linux-x64.tar.xz
+
+# Download and install nvm and node using deprecated script:
+#RUN apt-get update && apt-get install -y \
+#    gnupg2 \
+#    && curl -fsSL https://deb.nodesource.com/setup_12.x | bash - \
+#    && apt-get install -y nodejs \
+#    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy migration script
 COPY init.sh /usr/local/bin/init.sh

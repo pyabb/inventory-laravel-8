@@ -1,7 +1,8 @@
 require('./vue-asset');
-Vue.component('create-user', require('./components/user/CreateUser.vue'));
-Vue.component('view-user', require('./components/user/ViewUser.vue'));
+import CreateUser from "./components/user/CreateUser.vue";
+import ViewUser from "./components/user/ViewUser.vue";
 
-var app = new Vue({
-    el: '#inventory'
-});
+Vue.component('create-user', CreateUser);
+Vue.component('view-user', ViewUser);
+
+var app = new Vue({el: '#inventory'});

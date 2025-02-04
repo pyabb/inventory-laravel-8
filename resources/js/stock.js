@@ -1,7 +1,8 @@
 require('./vue-asset');
-Vue.component('create-stock', require('./components/stock/CreateStock.vue'));
-Vue.component('view-stock', require('./components/stock/ViewStock.vue'));
+import CreateStock from "./components/stock/CreateStock.vue";
+import ViewStock from "./components/stock/ViewStock.vue";
 
-var app = new Vue({
-    el: '#inventory'
-});
+Vue.component('create-stock', CreateStock);
+Vue.component('view-stock', ViewStock);
+
+var app = new Vue({el: '#inventory'});

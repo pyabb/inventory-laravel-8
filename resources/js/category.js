@@ -1,10 +1,8 @@
 require('./vue-asset');
-Vue.component('create-category', require('./components/category/CreateCategory.vue'));
-Vue.component('view-category', require('./components/category/ViewCategory.vue'));
+import CreateCategory from "./components/category/CreateCategory.vue";
+import ViewCategory from "./components/category/ViewCategory.vue";
 
+Vue.component('create-category', CreateCategory);
+Vue.component('view-category', ViewCategory);
 
-
-var app = new Vue({
-
-    el: '#inventory'
-});
+var app = new Vue({el: '#inventory'});

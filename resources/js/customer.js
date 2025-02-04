@@ -1,8 +1,8 @@
 require('./vue-asset');
-Vue.component('create-customer', require('./components/customer/CreateCustomer.vue'));
-Vue.component('view-customer', require('./components/customer/ViewCustomer.vue'));
+import CreateCustomer from "./components/customer/CreateCustomer.vue";
+import ViewCustomer from "./components/customer/ViewCustomer.vue";
 
-var app = new Vue({
+Vue.component('create-customer', CreateCustomer);
+Vue.component('view-customer', ViewCustomer);
 
-    el: '#inventory'
-});
+var app = new Vue({el: '#inventory'});
