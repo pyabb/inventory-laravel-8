@@ -4,7 +4,7 @@ namespace Egulias\EmailValidator\Warning;
 
 class QuotedPart extends Warning
 {
-    public const CODE = 36;
+    const CODE = 36;
 
     /**
      * @param scalar $prevToken

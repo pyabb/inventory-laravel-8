@@ -1,8 +1,8 @@
 require('./vue-asset');
-Vue.component('create-invoice', require('./components/invoice/CreateInvoice.vue'));
-Vue.component('view-invoice', require('./components/invoice/ViewInvoice.vue'));
+import CreateInvoice from "./components/invoice/CreateInvoice.vue";
+import ViewInvoice from "./components/invoice/ViewInvoice.vue";
 
-var app = new Vue({
+Vue.component('create-invoice', CreateInvoice);
+Vue.component('view-invoice', ViewInvoice);
 
-    el: '#inventory'
-});
+var app = new Vue({el: '#inventory'});

@@ -1,10 +1,8 @@
 require('./vue-asset');
-Vue.component('create-product', require('./components/product/CreateProduct.vue'));
-Vue.component('view-product', require('./components/product/ViewProduct.vue'));
+import CreateProduct from "./components/product/CreateProduct.vue";
+import ViewProduct from "./components/product/ViewProduct.vue";
 
+Vue.component('create-product', CreateProduct);
+Vue.component('view-product', ViewProduct);
 
-
-var app = new Vue({
-
-    el: '#inventory'
-});
+var app = new Vue({el: '#inventory'});

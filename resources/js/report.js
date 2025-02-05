@@ -1,6 +1,6 @@
 require('./vue-asset');
-Vue.component('report-form', require('./components/report/ReportForm.vue'));
+import ReportForm from "./components/report/ReportForm.vue";
 
-var app = new Vue({
-    el: '#inventory'
-});
+Vue.component('report-form', ReportForm);
+
+var app = new Vue({el: '#inventory'});

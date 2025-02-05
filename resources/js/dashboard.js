@@ -1,8 +1,6 @@
 require('./vue-asset');
-Vue.component('info-box', require('./components/dashboard/InfoBox.vue'));
-// Vue.component('view-invoice', require('./components/invoice/ViewInvoice.vue'));
+import InfoBox from './components/dashboard/InfoBox.vue';
 
-var app = new Vue({
+Vue.component('info-box', InfoBox);
 
-    el: '#inventory'
-});
+var app = new Vue({el: '#inventory'});
