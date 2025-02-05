@@ -7,10 +7,11 @@ use Symfony\Component\CssSelector\Node\Specificity;
 class Processor
 {
     /**
-     * Split a string into seperate properties
+     * Split a string into separate properties
      *
      * @param string $propertiesString
-     * @return array
+     *
+     * @return string[]
      */
     public function splitIntoSeparateProperties($propertiesString)
     {
@@ -40,16 +41,17 @@ class Processor
     }
 
     /**
-     * @param $string
-     * @return mixed|string
+     * @param string $string
+     *
+     * @return string
      */
     private function cleanup($string)
     {
         $string = str_replace(array("\r", "\n"), '', $string);
         $string = str_replace(array("\t"), ' ', $string);
         $string = str_replace('"', '\'', $string);
-        $string = preg_replace('|/\*.*?\*/|', '', $string);
-        $string = preg_replace('/\s\s+/', ' ', $string);
+        $string = preg_replace('|/\*.*?\*/|', '', $string) ?? $string;
+        $string = preg_replace('/\s\s+/', ' ', $string) ?? $string;
 
         $string = trim($string);
         $string = rtrim($string, ';');
@@ -58,12 +60,13 @@ class Processor
     }
 
     /**
-     * Convert a property-string into an object
+     * Converts a property-string into an object
      *
      * @param string $property
+     *
      * @return Property|null
      */
-    public function convertToObject($property, Specificity $specificity = null)
+    public function convertToObject($property, ?Specificity $specificity = null)
     {
         if (strpos($property, ':') === false) {
             return null;
@@ -82,12 +85,13 @@ class Processor
     }
 
     /**
-     * Convert an array of property-strings into objects
+     * Converts an array of property-strings into objects
      *
-     * @param array $properties
+     * @param string[] $properties
+     *
      * @return Property[]
      */
-    public function convertArrayToObjects(array $properties, Specificity $specificity = null)
+    public function convertArrayToObjects(array $properties, ?Specificity $specificity = null)
     {
         $objects = array();
 
@@ -106,7 +110,8 @@ class Processor
     /**
      * Build the property-string for multiple properties
      *
-     * @param array $properties
+     * @param Property[] $properties
+     *
      * @return string
      */
     public function buildPropertiesString(array $properties)

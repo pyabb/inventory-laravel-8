@@ -579,7 +579,7 @@ Jan-10-2006
       </xsd:enumeration>
       <xsd:enumeration value="sku">
         <xsd:annotation>
-          <xsd:documentation>ISO-12620 2.1.17.1: Stock keeping unit, an  item identified by a unique alphanumeric designation assigned to an object in an  control system.</xsd:documentation>
+          <xsd:documentation>ISO-12620 2.1.17.1: Stock keeping unit, an inventory item identified by a unique alphanumeric designation assigned to an object in an inventory control system.</xsd:documentation>
         </xsd:annotation>
       </xsd:enumeration>
       <xsd:enumeration value="standard-text">
