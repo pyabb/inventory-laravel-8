@@ -13,7 +13,7 @@
         <div class="card">
             <div class="body">
                 <form id="sign_in" method="POST" action="{{ route('login') }}">
-                	  {{ csrf_field() }}
+                    @csrf
                     <div class="msg">Iniciar sesión</div>
                     <div class="input-group">
                         <span class="input-group-addon">

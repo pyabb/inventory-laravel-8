@@ -42,9 +42,7 @@
                 @endif
 				
                 <form action="{{ route('company.store') }}" method="post">
-                    
-                    {{ csrf_field() }}
-					
+                    @csrf
 					<div class="row">
 						<div class="col-md-6">
                             <p>Nombre de la empresa</p>

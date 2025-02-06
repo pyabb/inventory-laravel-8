@@ -41,9 +41,7 @@
                 @endif
 				
                 <form action="{{ route('password.store') }}" method="post">
-                    
-                    {{ csrf_field() }}
-					
+                    @csrf
 					<div class="row">
 						<div class="col-md-12">
                            
