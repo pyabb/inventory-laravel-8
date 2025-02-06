@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,7 +11,7 @@
 
 namespace Psy\Command;
 
-use Symfony\Component\Console\Helper\TableHelper;
+use Psy\Output\ShellOutput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class HelpCommand extends Command
 {
-    private $command;
+    private ?Command $command = null;
 
     /**
      * {@inheritdoc}
@@ -45,15 +45,17 @@ class HelpCommand extends Command
      *
      * @param Command $command
      */
-    public function setCommand($command)
+    public function setCommand(Command $command)
     {
         $this->command = $command;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return int 0 if everything went fine, or an exit code
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->command !== null) {
             // help for an individual command
@@ -86,13 +88,15 @@ class HelpCommand extends Command
                 ]);
             }
 
-            $output->startPaging();
-            if ($table instanceof TableHelper) {
-                $table->render($output);
-            } else {
-                $table->render();
+            if ($output instanceof ShellOutput) {
+                $output->startPaging();
             }
-            $output->stopPaging();
+
+            $table->render();
+
+            if ($output instanceof ShellOutput) {
+                $output->stopPaging();
+            }
         }
 
         return 0;
