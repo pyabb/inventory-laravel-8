@@ -31,9 +31,10 @@ RUN groupadd -g 1000 ${USERNAME} \
 WORKDIR /var/www/html
 
 # Download and install nvm and node using .tar file:
-COPY tmp/node-v12.22.12-linux-x64.tar.xz /tmp
-RUN tar -xJf /tmp/node-v12.22.12-linux-x64.tar.xz -C /usr/local --strip-components=1
-RUN rm /tmp/node-v12.22.12-linux-x64.tar.xz
+ARG NODE=node-v14.21.3-linux-x64.tar.xz
+COPY tmp/${NODE} /tmp
+RUN tar -xJf /tmp/${NODE} -C /usr/local --strip-components=1
+RUN rm /tmp/${NODE}
 
 # Download and install nvm and node using deprecated script:
 #RUN apt-get update && apt-get install -y \

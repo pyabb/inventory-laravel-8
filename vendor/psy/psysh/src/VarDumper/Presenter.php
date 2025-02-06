@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,17 +22,21 @@ class Presenter
 {
     const VERBOSE = 1;
 
-    private $cloner;
-    private $dumper;
-    private $exceptionsImportants = [
+    private Cloner $cloner;
+    private Dumper $dumper;
+
+    private const IMPORTANT_EXCEPTIONS = [
         "\0*\0message",
         "\0*\0code",
         "\0*\0file",
         "\0*\0line",
         "\0Exception\0previous",
     ];
-    private $styles = [
+
+    private const STYLES = [
         'num'       => 'number',
+        'integer'   => 'integer',
+        'float'     => 'float',
         'const'     => 'const',
         'str'       => 'string',
         'cchr'      => 'default',
@@ -49,20 +53,20 @@ class Presenter
     public function __construct(OutputFormatter $formatter, $forceArrayIndexes = false)
     {
         // Work around https://github.com/symfony/symfony/issues/23572
-        $oldLocale = \setlocale(LC_NUMERIC, 0);
-        \setlocale(LC_NUMERIC, 'C');
+        $oldLocale = \setlocale(\LC_NUMERIC, 0);
+        \setlocale(\LC_NUMERIC, 'C');
 
         $this->dumper = new Dumper($formatter, $forceArrayIndexes);
-        $this->dumper->setStyles($this->styles);
+        $this->dumper->setStyles(self::STYLES);
 
         // Now put the locale back
-        \setlocale(LC_NUMERIC, $oldLocale);
+        \setlocale(\LC_NUMERIC, $oldLocale);
 
         $this->cloner = new Cloner();
         $this->cloner->addCasters(['*' => function ($obj, array $a, Stub $stub, $isNested, $filter = 0) {
             if ($filter || $isNested) {
-                if ($obj instanceof \Exception) {
-                    $a = Caster::filter($a, Caster::EXCLUDE_NOT_IMPORTANT | Caster::EXCLUDE_EMPTY, $this->exceptionsImportants);
+                if ($obj instanceof \Throwable) {
+                    $a = Caster::filter($a, Caster::EXCLUDE_NOT_IMPORTANT | Caster::EXCLUDE_EMPTY, self::IMPORTANT_EXCEPTIONS);
                 } else {
                     $a = Caster::filter($a, Caster::EXCLUDE_PROTECTED | Caster::EXCLUDE_PRIVATE);
                 }
@@ -88,10 +92,8 @@ class Presenter
      * Present a reference to the value.
      *
      * @param mixed $value
-     *
-     * @return string
      */
-    public function presentRef($value)
+    public function presentRef($value): string
     {
         return $this->present($value, 0);
     }
@@ -104,10 +106,8 @@ class Presenter
      * @param mixed $value
      * @param int   $depth   (default: null)
      * @param int   $options One of Presenter constants
-     *
-     * @return string
      */
-    public function present($value, $depth = null, $options = 0)
+    public function present($value, ?int $depth = null, int $options = 0): string
     {
         $data = $this->cloner->cloneVar($value, !($options & self::VERBOSE) ? Caster::EXCLUDE_VERBOSE : 0);
 
@@ -116,21 +116,21 @@ class Presenter
         }
 
         // Work around https://github.com/symfony/symfony/issues/23572
-        $oldLocale = \setlocale(LC_NUMERIC, 0);
-        \setlocale(LC_NUMERIC, 'C');
+        $oldLocale = \setlocale(\LC_NUMERIC, 0);
+        \setlocale(\LC_NUMERIC, 'C');
 
         $output = '';
         $this->dumper->dump($data, function ($line, $depth) use (&$output) {
             if ($depth >= 0) {
                 if ('' !== $output) {
-                    $output .= PHP_EOL;
+                    $output .= \PHP_EOL;
                 }
-                $output .= \str_repeat('  ', $depth) . $line;
+                $output .= \str_repeat('  ', $depth).$line;
             }
         });
 
         // Now put the locale back
-        \setlocale(LC_NUMERIC, $oldLocale);
+        \setlocale(\LC_NUMERIC, $oldLocale);
 
         return OutputFormatter::escape($output);
     }
