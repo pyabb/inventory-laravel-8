@@ -11,6 +11,12 @@ let mix = require("laravel-mix");
  |
  */
 
+mix.options({
+    terser: {
+        extractComments: false,
+    }
+});
+
 mix.js("resources/js/app.js", "public/js");
 mix.js("resources/js/vendor.js", "public/js");
 mix.js("resources/js/product.js", "public/js");
