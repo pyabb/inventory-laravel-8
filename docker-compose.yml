@@ -7,7 +7,7 @@ services:
         volumes:
             - .:/var/www/html
         networks:
-            - inventory_laravel5
+            - inventory
         depends_on:
             - db
         command: 'init.sh'
@@ -23,12 +23,12 @@ services:
         volumes:
             - inventory:/var/lib/mysql
         networks:
-            - inventory_laravel5
+            - inventory
 
 volumes:
     inventory:
         driver: local
 
 networks:
-    inventory_laravel5:
+    inventory:
         external: true
