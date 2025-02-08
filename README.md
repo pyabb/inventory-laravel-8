@@ -1,5 +1,26 @@
-## Project Inventory Laravel 5
-This project is based on [INVENTORY](https://www.youtube.com/watch?v=dqBLvR7lC8k) and has been adapted for easier installation in environments such as XAMPP, cPanel, and Docker. Adjustments have been made to optimize deployment and compatibility, ensuring a more accessible experience for various use cases.
+# Project Inventory Laravel
+This project is based on
+<a href="https://www.youtube.com/watch?v=dqBLvR7lC8k" target="_blank">INVENTORY</a>
+and has been adapted for easier installation in environments such as XAMPP, cPanel, and Docker. Adjustments have been made to optimize deployment and compatibility, ensuring a more accessible experience for various use cases.
+
+## Laravel Upgrade History
+
+This project has been progressively upgraded through multiple Laravel versions to maintain compatibility and take advantage of new features and improvements:
+
+* Laravel 5.5 → 5.6: Minor updates and security fixes.
+* Laravel 5.6 → 5.7: Added new middleware features and improvements in error handling.
+* Laravel 5.7 → 5.8: Improved email validation, automatic policy discovery, and performance optimizations.
+* Laravel 5.8 → 6.x: Transitioned to LTS (Long-Term Support), replaced str_slug() with Str::slug(), and introduced improved job middleware.
+* Laravel 6.x → 7.x: Added Laravel Airlock (now Sanctum), better routing speed, Blade component tags, and fluent string operations.
+
+## Important Changes
+If you are upgrading from an older version, please consider the following adjustments:
+
+* The str_slug() helper function has been removed in Laravel 6. Instead, use Str::slug().
+* swiftmailer/swiftmailer has been deprecated in favor of symfony/mailer.
+* symfony/debug has been replaced with symfony/error-handler.
+* The default CSRF directive has been updated from {{ csrf_field() }} to @csrf for better readability and maintainability.
+* Ensure your PHP version is at least 7.2, as required by Laravel 7.x.
 
 ## Installation
 
@@ -28,11 +49,11 @@ Enter the directory.
 cd <directory name>
 ```
 
-Before running the make commands, you need create a new docker network using the name "inventory_laravel5".
+Before running the make commands, you need create a new docker network using the name "inventory".
 <br>
 If you need change de network name, then you need modify the network in docker compose file.
 ```shell
-docker network create inventory_laravel5
+docker network create inventory
 ```
 
 Run `make build` command to build the images for app and db containers.
@@ -125,3 +146,10 @@ DB_PASSWORD=
   * Email: `admin@inventory.org`
   * Password: `root`
 * Enjoy it!
+
+## Summary of Changes
+* Upgraded Laravel from 5.5 → 7.x step by step.
+* Updated PHP version requirements to 7.4.
+* Switched from csrf_field() to @csrf for better readability.
+* Adjusted deprecated functions and dependencies.
+* Improved documentation for installation and upgrades.
