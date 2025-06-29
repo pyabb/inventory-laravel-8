@@ -12,6 +12,16 @@ class RouteServiceProvider extends ServiceProvider
      *
      * In addition, it is set as the URL generator's root namespace.
      *
+     * In Laravel 8, this property is set to null by default.
+     * This allows your controller route declarations to use the standard PHP callable syntax,
+     * which provides better support for jumping to the controller class in many IDEs:
+     *
+     * // Using PHP callable syntax...
+     * Route::get('/users', [UserController::class, 'index']);
+     *
+     * // Using string syntax...
+     * Route::get('/users', 'App\Http\Controllers\UserController@index');
+     *
      * @var string
      */
     protected $namespace = 'App\Http\Controllers';
