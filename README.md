@@ -1,3 +1,4 @@
+
 # Project Inventory Laravel
 This project is based on
 <a href="https://www.youtube.com/watch?v=dqBLvR7lC8k" target="_blank">INVENTORY</a>
@@ -12,6 +13,7 @@ This project has been progressively upgraded through multiple Laravel versions t
 * Laravel 5.7 → 5.8: Improved email validation, automatic policy discovery, and performance optimizations.
 * Laravel 5.8 → 6.x: Transitioned to LTS (Long-Term Support), replaced str_slug() with Str::slug(), and introduced improved job middleware.
 * Laravel 6.x → 7.x: Added Laravel Airlock (now Sanctum), better routing speed, Blade component tags, and fluent string operations.
+* Laravel 7.x → 8.x: Introduced Laravel Jetstream, model factory classes, migration squashing, and rate limiting improvements.
 
 ## Important Changes
 If you are upgrading from an older version, please consider the following adjustments:
@@ -20,7 +22,11 @@ If you are upgrading from an older version, please consider the following adjust
 * swiftmailer/swiftmailer has been deprecated in favor of symfony/mailer.
 * symfony/debug has been replaced with symfony/error-handler.
 * The default CSRF directive has been updated from {{ csrf_field() }} to @csrf for better readability and maintainability.
-* Ensure your PHP version is at least 7.2, as required by Laravel 7.x.
+* Laravel 8 requires PHP 7.3 or higher.
+* Model factories have been completely redesigned in Laravel 8. The new class-based factory implementation provides better type-hinting and support for named arguments.
+* Models are now placed in the App\Models directory by default in Laravel 8.
+* Route definitions now use class name syntax for controller references (e.g., `UserController::class` instead of 'UserController').
+* Laravel 8 includes a new maintenance mode experience with pre-rendered views.
 
 ## Installation
 
@@ -117,10 +123,10 @@ DB_PASSWORD=Xl34c574B@3L
 ## Xampp installation
 The project configuration only allows installation in the htdocs folder and not in child folders.
 <br>
-This project only works with version 7.4 of XAMPP. It is recommended to download XAMPP with PHP version 7.4.
+This project only works with PHP version 7.3 or higher. It is recommended to download XAMPP with PHP version 7.4 or 8.0.
 
 * Download and import this repository content in your `htdocs` directory.
-* Import database using the inventory.sql file from `db` directory to your phpmyadmin database.
+* Import the database using the inventory.sql file from `db` directory to your phpmyadmin database.
 * Copy the .env.example file and rename it to .env. Then, update the credentials and settings according to your environment.
 
 ```dotenv
@@ -142,14 +148,16 @@ DB_PASSWORD=
   <br> ![](docs/img/structure.JPG)
 
 * Run the URL in your web browser `http://localhost`.
-* Don't forget the new credentials:
+* Remember the new credentials:
   * Email: `admin@inventory.org`
   * Password: `root`
 * Enjoy it!
 
 ## Summary of Changes
-* Upgraded Laravel from 5.5 → 7.x step by step.
-* Updated PHP version requirements to 7.4.
-* Switched from csrf_field() to @csrf for better readability.
+* Upgraded Laravel from 5.5 → 8.x step by step.
+* Updated PHP version requirements to 7.3 or higher.
+* Switched from `csrf_field()` to `@csrf` for better readability.
 * Adjusted deprecated functions and dependencies.
+* Restructured model factories to use the new class-based approach.
+* Updated routing syntax to use `::class` notation.
 * Improved documentation for installation and upgrades.
