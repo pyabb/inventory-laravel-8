@@ -1,52 +1,43 @@
 ARG PHP_VERSION=7.4.33-cli-bullseye
 FROM php:${PHP_VERSION}
 
-RUN apt-get update && apt-get install tzdata
-
-ENV TZ=America/Lima
-
-RUN cp /usr/share/zoneinfo/America/Lima /etc/localtime
-RUN echo "America/Lima" >  /etc/timezone
-
+# Update and install php extension for the project
+RUN apt-get update
 RUN apt-get install -y libicu-dev libpng-dev libfreetype-dev libjpeg62-turbo-dev libzip-dev
 RUN docker-php-ext-configure intl && docker-php-ext-install intl
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install gd
-
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install pdo_mysql
 
+# Create appuser
 ARG USERNAME=appuser
 RUN groupadd -g 1000 ${USERNAME} \
     && useradd -u 1000 -g ${USERNAME} -m -s /sbin/nologin ${USERNAME}
 
-# If you need to install Composer, uncomment the following lines of code, then update the Composer file hash from:
-# https://getcomposer.org/download/
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-#ARG COMPOSER_FILE_HASH=dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6
-#RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-#RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '${COMPOSER_FILE_HASH}') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-#RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-#RUN php -r "unlink('composer-setup.php');"
+# Install Node.js
+COPY --from=node:14 /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:14 /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 
+# Set work directory and copy project to image
 WORKDIR /var/www/html
+COPY . .
 
-# Download and install nvm and node using .tar file:
-ARG NODE=node-v14.21.3-linux-x64.tar.xz
-COPY tmp/${NODE} /tmp
-RUN tar -xJf /tmp/${NODE} -C /usr/local --strip-components=1
-RUN rm /tmp/${NODE}
+# Install dependencias
+RUN composer install --no-dev --optimize-autoloader
+RUN npm install
+RUN npm run production
 
-# Download and install nvm and node using deprecated script:
-#RUN apt-get update && apt-get install -y \
-#    gnupg2 \
-#    && curl -fsSL https://deb.nodesource.com/setup_12.x | bash - \
-#    && apt-get install -y nodejs \
-#    && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN chown -R ${USERNAME}:${USERNAME} /var/www/html
 
-# Copy migration script
-COPY init.sh /usr/local/bin/init.sh
-
-# Dar permisos de ejecución al script
+# Modified permissions init.sh script
+COPY --chown=${USERNAME}:${USERNAME} init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
 
 USER ${USERNAME}
+
+CMD ["/usr/local/bin/init.sh"]

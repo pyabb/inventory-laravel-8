@@ -1,4 +1,14 @@
-cp .env.example .env
+#!/bin/bash
+
+if [ ! -f ".env" ]; then
+    cp .env.example .env
+    php artisan key:generate
+fi
+
+chmod -R 775 storage bootstrap/cache
+
 php artisan config:clear
-php artisan key:generate
-php artisan serve --host 0.0.0.0 --port=8000
+php artisan cache:clear
+php artisan view:clear
+
+exec php artisan serve --host=0.0.0.0 --port=8000
