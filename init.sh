@@ -5,8 +5,6 @@ if [ ! -f ".env" ]; then
     php artisan key:generate
 fi
 
-chmod -R 775 storage bootstrap/cache
-
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
