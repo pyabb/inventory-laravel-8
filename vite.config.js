@@ -8,7 +8,7 @@ export default defineConfig({
             input: [
                 // 'resources/css/app.css',
                 'resources/js/app.js',
-                // 'resources/js/vendor.js',
+                'resources/js/vendor.js',
                 'resources/js/product.js',
                 // 'resources/js/stock.js',
                 'resources/js/category.js',
