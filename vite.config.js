@@ -11,7 +11,7 @@ export default defineConfig({
                 // 'resources/js/vendor.js',
                 // 'resources/js/product.js',
                 // 'resources/js/stock.js',
-                // 'resources/js/category.js',
+                'resources/js/category.js',
                 // 'resources/js/invoice.js',
                 // 'resources/js/report.js',
                 // 'resources/js/role.js',
