@@ -25,13 +25,8 @@
 										</div>
 									</div>
 								</div>
-
-
 							</div>
-
-
 						</form>
-
 					</div>
 					<div class="modal-footer">
 						<br>
@@ -46,78 +41,38 @@
 </template>
 
 <script>
-
-import { EventBus } from '../../vue-asset';
+import { EventBus } from '../../event-bus';
 import mixin from '../../mixin';
-
+import axios from '../../axios-config';
 
 export default {
-
 	mixins: [mixin],
-
 	data() {
-
 		return {
-
 			role: {
-
 				role_name: '',
-
 			},
-
 			errors: null
-
-
 		}
-
 	},
-
 	methods: {
-
-
 		createCategory() {
-
 			axios.post(base_url + 'role', this.role)
-
 				.then(response => {
-
 					$('#create-category').modal('hide');
-
 					this.role = { 'role_name': '' };
 					this.errors = null;
-					EventBus.$emit('role-created', response.data);
-
+					EventBus.emit('role-created', response.data);
 					// this.showMessage(response.data);
-
-					this.successALert(response.data);
-
+					this.successAlert(response.data);
 				})
 				.catch(err => {
-
 					if (err.response) {
-
 						this.errors = err.response.data.errors;
 					}
-
 				})
-
 		},
-
 	},
-
-	// end of method section 
-
-
-	created() {
-
-
-	},
-
-
-
-
+	created() {},
 }
-
-
-
 </script>
