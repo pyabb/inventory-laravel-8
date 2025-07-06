@@ -12,7 +12,7 @@ export default defineConfig({
                 'resources/js/product.js',
                 'resources/js/stock.js',
                 'resources/js/category.js',
-                // 'resources/js/invoice.js',
+                'resources/js/invoice.js',
                 // 'resources/js/report.js',
                 // 'resources/js/role.js',
                 // 'resources/js/user.js',
