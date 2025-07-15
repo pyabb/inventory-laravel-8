@@ -13,7 +13,7 @@ export default defineConfig({
                 'resources/js/stock.js',
                 'resources/js/category.js',
                 'resources/js/invoice.js',
-                // 'resources/js/report.js',
+                'resources/js/report.js',
                 'resources/js/role.js',
                 'resources/js/user.js',
                 'resources/js/customer.js',
