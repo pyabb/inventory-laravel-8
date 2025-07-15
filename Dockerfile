@@ -1,40 +1,55 @@
-ARG PHP_VERSION=7.4.33-cli-bullseye
-FROM php:${PHP_VERSION}
+### STAGE 1: Build PHP + Composer + Node 14 + npm
+FROM php:8.2-fpm-alpine3.21 AS build
 
-# Update and install php extension for the project
-RUN apt-get update
-RUN apt-get install -y libicu-dev libpng-dev libfreetype-dev libjpeg62-turbo-dev libzip-dev
-RUN docker-php-ext-configure intl && docker-php-ext-install intl
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install gd
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install pdo_mysql
+# Instalar dependencias necesarias para compilar extensiones PHP
+RUN apk add --no-cache \
+    libpng-dev libjpeg-turbo-dev freetype-dev icu-dev libzip-dev \
+    oniguruma-dev git bash curl
 
-# Create appuser
-ARG USERNAME=appuser
-RUN groupadd -g 1000 ${USERNAME} \
-    && useradd -u 1000 -g ${USERNAME} -m -s /sbin/nologin ${USERNAME}
+# Instalar extensiones PHP necesarias
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install intl gd zip pdo_mysql
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Instalar Composer
+COPY --from=composer:2.2.20 /usr/bin/composer /usr/bin/composer
 
-# Install Node.js
-COPY --from=node:14 /usr/local/bin/node /usr/local/bin/node
-COPY --from=node:14 /usr/local/lib/node_modules /usr/local/lib/node_modules
-RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
-    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+# Instalar Node 14 desde Node.js Alpine tarball
+RUN curl -fsSL https://unofficial-builds.nodejs.org/download/release/v14.21.3/node-v14.21.3-linux-x64-musl.tar.xz | tar -xJ -C /usr/local --strip-components=1
 
-# Set work directory and copy project to image
-WORKDIR /var/www/html
+# Comprobar versiones
+RUN node -v && npm -v
+
+WORKDIR /app
 COPY . .
 
-# Install dependencias
+# Instalar dependencias
 RUN composer install --no-dev --optimize-autoloader
-RUN npm install
-RUN npm run production
+RUN npm install && npm run build
 
-RUN chown -R ${USERNAME}:${USERNAME} /var/www/html
 
-# Modified permissions init.sh script
+### STAGE 2: Producción final sin herramientas de desarrollo
+FROM php:8.2-fpm-alpine3.21
+
+# Instalar solo librerías necesarias para ejecutar
+RUN apk add --no-cache \
+    libpng libjpeg-turbo freetype icu libzip oniguruma bash
+
+# Copiar extensiones PHP ya compiladas
+COPY --from=build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
+COPY --from=build /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
+
+# Copiar solo la app ya preparada
+WORKDIR /var/www/html
+COPY --from=build /app /var/www/html
+
+# Crear usuario de ejecución
+ARG USERNAME=appuser
+RUN addgroup -g 1000 ${USERNAME} && \
+    adduser -D -u 1000 -G ${USERNAME} -s /sbin/nologin ${USERNAME} && \
+    chown -R ${USERNAME}:${USERNAME} storage bootstrap/cache
+
+# Script de inicialización
 COPY --chown=${USERNAME}:${USERNAME} init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
 
