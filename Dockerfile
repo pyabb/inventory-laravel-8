@@ -1,58 +1,72 @@
-### STAGE 1: Build PHP + Composer + Node 14 + npm
-FROM php:8.2-fpm-alpine3.21 AS build
+### STAGE 1: Build de frontend con Node 22 y Vite
+FROM node:22-alpine AS node_build
 
-# Instalar dependencias necesarias para compilar extensiones PHP
+WORKDIR /app
+
+# Copiar necessary files to build Vite assets
+COPY package*.json vite.config.* ./
+COPY resources resources
+
+# Install dependencies and compile assets
+RUN npm install && npm run build
+
+
+### STAGE 2: Build de PHP + Composer
+FROM php:8.2-fpm-alpine3.21 AS php_build
+
 RUN apk add --no-cache \
     libpng-dev libjpeg-turbo-dev freetype-dev icu-dev libzip-dev \
     oniguruma-dev git bash curl
 
-# Instalar extensiones PHP necesarias
+# Install necessary PHP extensions
 RUN docker-php-ext-configure intl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install intl gd zip pdo_mysql
 
-# Instalar Composer
+# Install Composer
 COPY --from=composer:2.2.20 /usr/bin/composer /usr/bin/composer
-
-# Instalar Node 14 desde Node.js Alpine tarball
-RUN curl -fsSL https://unofficial-builds.nodejs.org/download/release/v14.21.3/node-v14.21.3-linux-x64-musl.tar.xz | tar -xJ -C /usr/local --strip-components=1
-
-# Comprobar versiones
-RUN node -v && npm -v
 
 WORKDIR /app
 COPY . .
 
-# Instalar dependencias
-RUN composer install --no-dev --optimize-autoloader
-RUN npm install && npm run build
+# Remove unnecessary node_build files and install composer dependencias
+RUN rm -rf node_modules \
+    package*.json \
+    vite.config.* \
+    resources/js \
+    resources/css \
+    resources/sass \
+    resources/ts \
+    && composer install --no-dev --optimize-autoloader
 
 
-### STAGE 2: Producción final sin herramientas de desarrollo
+### STAGE 3: Final production only with PHP and assets
 FROM php:8.2-fpm-alpine3.21
 
-# Instalar solo librerías necesarias para ejecutar
 RUN apk add --no-cache \
     libpng libjpeg-turbo freetype icu libzip oniguruma bash
 
-# Copiar extensiones PHP ya compiladas
-COPY --from=build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
-COPY --from=build /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
+# Copy PHP extensions
+COPY --from=php_build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
+COPY --from=php_build /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
 
-# Copiar solo la app ya preparada
+# Copy proyect code
 WORKDIR /var/www/html
-COPY --from=build /app /var/www/html
+COPY --from=php_build /app /var/www/html
 
-# Crear usuario de ejecución
+# Copy assets
+COPY --from=node_build /app/public/build /var/www/html/public/build
+
+# Create secure user
 ARG USERNAME=appuser
 RUN addgroup -g 1000 ${USERNAME} && \
     adduser -D -u 1000 -G ${USERNAME} -s /sbin/nologin ${USERNAME} && \
-    chown -R ${USERNAME}:${USERNAME} storage bootstrap/cache
+    chown -R ${USERNAME}:${USERNAME} storage bootstrap/cache public
 
-# Script de inicialización
+# Script to run clear commandas and start server
 COPY --chown=${USERNAME}:${USERNAME} init.sh /usr/local/bin/init.sh
 RUN chmod +x /usr/local/bin/init.sh
 
 USER ${USERNAME}
 
-CMD ["/usr/local/bin/init.sh"]
+CMD ["php-fpm"]
