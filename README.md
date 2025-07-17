@@ -36,6 +36,7 @@ If you are upgrading from an older version, please consider the following adjust
 * Unnecessary JavaScript files have been removed to optimize the codebase.
 * Laravel Sail has been added for a more consistent development environment.
 * Database migrations and seeders are now used for both development and production environments, with specific seeders for each environment.
+* In resources/js/bootstrap.js, the project attempts to import 'bootstrap', 'popper.js', and 'jquery', but these dependencies are not installed in node_modules. This doesn't cause build failures but will be removed in Laravel 10.
 
 ## Installation
 
@@ -95,7 +96,9 @@ docker run --rm \
 
 Use Laravel Sail to start the development environment.
 ```shell
-./vendor/bin/sail up -d
+./vendor/bin/sail up -d  # For first-time execution
+# OR
+./vendor/bin/sail build --no-cache  # If you already have other projects using Sail
 ```
 
 Generate the application key:
@@ -114,10 +117,12 @@ Run database migrations and seeders.
 Install NPM dependencies and build assets with Vite.
 ```shell
 ./vendor/bin/sail npm install
-./vendor/bin/sail npm run dev  # For development
+./vendor/bin/sail npm run dev  # For development - starts Vite server and references assets with @vite()
 # OR
-./vendor/bin/sail npm run build  # For production
+./vendor/bin/sail npm run build  # For production - generates public/build directory
 ```
+
+Note: If the project doesn't have the public/build directory, you need to generate it with `npm run build`. If you want to work in development mode, use `npm run dev` which will start the Vite server and reference all assets with @vite() directive in your views.
 
 ### Laravel Sail Commands
 Laravel Sail provides a simple CLI for interacting with Laravel's default Docker development environment. Here are some useful commands:
@@ -281,10 +286,6 @@ If you're developing locally with XAMPP and plan to deploy to a production serve
   <br> ![](docs/img/structure.JPG)
 
 * Run the URL in your web browser `http://localhost`.
-* Remember the default credentials:
-  * Email: `admin@inventory.org`
-  * Password: `123123`
-* Enjoy it!
 
 ## Summary of Changes
 * Upgraded Laravel from 5.5 → 9.x step by step.
@@ -299,3 +300,11 @@ If you're developing locally with XAMPP and plan to deploy to a production serve
 * Restructured model factories to use the new class-based approach.
 * Updated routing syntax to use `::class` notation.
 * Improved documentation for installation and upgrades.
+
+## Default Credentials
+Remember the default credentials:
+
+* Email: `admin@inventory.org`
+* Password: `123123`
+
+Enjoy it!
