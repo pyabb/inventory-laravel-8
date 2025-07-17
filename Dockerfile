@@ -41,32 +41,20 @@ RUN rm -rf node_modules \
 
 
 ### STAGE 3: Final production only with PHP and assets
-FROM php:8.2-fpm-alpine3.21
+FROM dunglas/frankenphp:php8.2-alpine
 
-RUN apk add --no-cache \
-    libpng libjpeg-turbo freetype icu libzip oniguruma bash
-
-# Copy PHP extensions
-COPY --from=php_build /usr/local/lib/php/extensions /usr/local/lib/php/extensions
-COPY --from=php_build /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
+RUN install-php-extensions \
+	pdo_mysql \
+	gd \
+	intl \
+	zip \
+	opcache
 
 # Copy proyect code
-WORKDIR /var/www/html
-COPY --from=php_build /app /var/www/html
+WORKDIR /app
+COPY --from=php_build /app /app
 
 # Copy assets
 COPY --from=node_build /app/public/build /var/www/html/public/build
 
-# Create secure user
-ARG USERNAME=appuser
-RUN addgroup -g 1000 ${USERNAME} && \
-    adduser -D -u 1000 -G ${USERNAME} -s /sbin/nologin ${USERNAME} && \
-    chown -R ${USERNAME}:${USERNAME} storage bootstrap/cache public
-
-# Script to run clear commandas and start server
-COPY --chown=${USERNAME}:${USERNAME} init.sh /usr/local/bin/init.sh
-RUN chmod +x /usr/local/bin/init.sh
-
-USER ${USERNAME}
-
-CMD ["php-fpm"]
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
