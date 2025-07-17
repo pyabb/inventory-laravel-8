@@ -29,6 +29,5 @@
 @endsection
 
 @push('script')
-{{--    <script type="text/javascript" src="{{ asset('/js/user.js') }}"></script>--}}
     @vite('resources/js/user.js')
 @endpush

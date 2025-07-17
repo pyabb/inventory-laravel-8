@@ -28,6 +28,5 @@
 @endsection
 
 @push('script')
-{{--<script type="text/javascript" src="{{ asset('/js/vendor.js') }}"></script>--}}
     @vite('resources/js/vendor.js')
 @endpush
