@@ -1,8 +1,9 @@
-require('./vue-asset');
+import { createApp } from 'vue';
 import CreateCategory from "./components/category/CreateCategory.vue";
 import ViewCategory from "./components/category/ViewCategory.vue";
 
-Vue.component('create-category', CreateCategory);
-Vue.component('view-category', ViewCategory);
+const app = createApp({});
 
-var app = new Vue({el: '#inventory'});
+app.component('create-category', CreateCategory);
+app.component('view-category', ViewCategory);
+app.mount('#inventory');
