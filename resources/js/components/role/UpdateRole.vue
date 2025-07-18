@@ -24,13 +24,8 @@
 										</div>
 									</div>
 								</div>
-
-
 							</div>
-
-
 						</form>
-
 					</div>
 					<div class="modal-footer">
 						<br>
@@ -45,118 +40,66 @@
 </template>
 
 <script>
-
-import { EventBus } from '../../vue-asset';
+import { EventBus } from '../../event-bus';
 import mixin from '../../mixin';
-
+import axios from '../../axios-config';
 
 export default {
-
 	name: 'update-role',
-
 	mixins: [mixin],
-
 	data() {
-
 		return {
-
 			role: {
-
 				id: 0,
 				role_name: '',
-
 			},
-
 			errors: null
-
 		}
-
 	},
-
 	created() {
-
 		let vm = this;
 
-		EventBus.$on('role-edit', function (id) {
-
+		EventBus.on('role-edit', function (id) {
 			vm.role.id = id;
-
 			vm.editRole(id);
-
 			$('#update-category').modal('show');
-
 		});
 
 		$('#update-category').on('hidden.bs.modal', function () {
 			vm.closeModal();
 		});
-
-
-
 	},
-
 	methods: {
-
-
-
-
 		editRole(id) {
-
 			axios.get(base_url + 'role/' + id + '/edit')
-
 				.then(response => {
-
-
 					this.role = {
 						id: response.data.id,
 						role_name: response.data.role_name,
 					}
-
 				})
-
 		},
 		updateRole(id) {
-
 			axios.post(base_url + 'role/update/' + id, this.role)
 				.then(res => {
-
-					if (res.data.status == 'success') {
-
-						this.successALert(res.data);
-						EventBus.$emit('role-created', 1);
+					if (res.data.status === 'success') {
+						this.successAlert(res.data);
+						EventBus.emit('role-created', 1);
 						this.closeModal();
 						$('#update-category').modal('hide');
 					}
-
-
-
 				})
 				.catch(err => {
-
 					if (err.response) {
-
 						this.errors = err.response.data.errors;
 					}
 				})
-
 		},
-
-
-
 		closeModal() {
-
 			this.errors = null;
 			this.role = { 'id': 0, 'role_name': '' };
-			EventBus.$emit('role-created', 1);
+			EventBus.emit('role-created', 1);
 		}
-
-
-
-
 	}
-
 }
-
-
-
 </script>

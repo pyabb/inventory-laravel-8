@@ -98,21 +98,15 @@
 </template>
 
 <script>
-
-import { EventBus } from '../../vue-asset';
+import { EventBus } from '../../event-bus';
 import mixin from '../../mixin';
-
+import axios from '../../axios-config';
 
 export default {
-
 	mixins: [mixin],
-
 	data() {
-
 		return {
-
 			user: {
-
 				name: '',
 				email: '',
 				password: '',
@@ -120,27 +114,15 @@ export default {
 				role: '',
 
 			},
-
 			role_list: [],
-
 			errors: null
-
-
 		}
-
 	},
-
 	mounted() {
-
 		this.roleList();
-
 	},
-
 	methods: {
-
-
 		createuser() {
-
 			axios.post(base_url + 'user', this.user)
 
 				.then(response => {
@@ -156,45 +138,22 @@ export default {
 					};
 
 					this.errors = null;
-					EventBus.$emit('user-created', response.data);
-					this.successALert(response.data);
-
+					EventBus.emit('user-created', response.data);
+					this.successAlert(response.data);
 				})
 				.catch(err => {
-
 					if (err.response) {
-
 						this.errors = err.response.data.errors;
 					}
-
 				})
-
 		},
-
 		roleList() {
-
 			axios.get(base_url + 'role-list')
 				.then(response => {
 					this.role_list = response.data;
 				});
-
 		},
-
 	},
-
-	// end of method section 
-
-
-	created() {
-
-
-	},
-
-
-
-
+	created() {},
 }
-
-
-
 </script>

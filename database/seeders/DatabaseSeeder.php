@@ -11,8 +11,12 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        // $this->call(UsersTableSeeder::class);
+        if (app()->environment('production')) {
+            $this->call(ProductionSeeder::class);
+        } else {
+            $this->call(DevelopmentSeeder::class);
+        }
     }
 }

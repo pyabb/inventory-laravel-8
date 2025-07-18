@@ -1,8 +1,9 @@
-require('./vue-asset');
+import { createApp } from "vue";
 import CreateProduct from "./components/product/CreateProduct.vue";
 import ViewProduct from "./components/product/ViewProduct.vue";
 
-Vue.component('create-product', CreateProduct);
-Vue.component('view-product', ViewProduct);
+const app = createApp({});
 
-var app = new Vue({el: '#inventory'});
+app.component('create-product', CreateProduct);
+app.component('view-product', ViewProduct);
+app.mount('#inventory');
