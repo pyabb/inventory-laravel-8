@@ -96,9 +96,12 @@ docker run --rm \
 
 Use Laravel Sail to start the development environment.
 ```shell
-./vendor/bin/sail up -d  # For first-time execution
-# OR
-./vendor/bin/sail build --no-cache  # If you already have other projects using Sail
+# For first-time execution
+./vendor/bin/sail up -d
+
+# Or, if you already have other Sail projects and want to rebuild without cache
+./vendor/bin/sail build --no-cache
+./vendor/bin/sail up -d
 ```
 
 Generate the application key:
