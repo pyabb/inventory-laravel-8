@@ -2,28 +2,35 @@
 
 @section('title','Inventory | Productos')
 
-@section('page-title','Lista de Productos')
+@section('page-title','Lista de productos')
 
 @section('content')
-    <div class="row clearfix">
-        <create-product :categorys="{{ json_encode($category) }}"></create-product>
-    </div>
-    <div class="row clearfix">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="card">
-                <div class="header">
-                    <h2>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-product">
-                            Producto nuevo
-                        </button>
-                    </h2>
-                </div>
-                <view-product :categorys="{{ json_encode($category) }}"></view-product>
+
+<div class="row clearfix">
+    <create-product :categorys="{{ json_encode($category) }}"></create-product>
+</div>
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="header">
+                <h2>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-product">
+                        Producto nuevo
+                    </button>
+                </h2>
             </div>
+
+            <view-product :categorys="{{ json_encode($category) }}"></view-product>
+
         </div>
     </div>
+</div>
+
 @endsection
 
 @push('script')
-    @vite('resources/js/product.js')
+
+<script type="text/javascript" src="{{ asset('/js/product.js') }}"></script>
+
 @endpush

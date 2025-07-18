@@ -1,9 +1,8 @@
-import { createApp } from 'vue';
+require('./vue-asset');
 import CreateVendor from "./components/vendor/CreateVendor.vue";
 import ViewVendor from "./components/vendor/ViewVendor.vue";
 
-const app = createApp({});
+Vue.component('create-vendor', CreateVendor);
+Vue.component('view-vendor', ViewVendor);
 
-app.component('create-vendor', CreateVendor);
-app.component('view-vendor', ViewVendor);
-app.mount('#inventory');
+var app = new Vue({el: '#inventory'});

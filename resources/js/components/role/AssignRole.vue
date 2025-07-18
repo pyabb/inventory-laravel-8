@@ -24,6 +24,7 @@
 
 										
 									</div> -->
+
 									<div class="demo-checkbox" v-for="(value, index) in role.menus" :key="index">
 
 										<div class="col-md-12">
@@ -48,8 +49,13 @@
 
 									</div>
 								</div>
+
+
 							</div>
+
+
 						</form>
+
 					</div>
 					<div class="modal-footer">
 						<br>
@@ -64,70 +70,119 @@
 </template>
 
 <script>
-import { EventBus } from '../../event-bus';
+
+import { EventBus } from '../../vue-asset';
 import mixin from '../../mixin';
-import axios from '../../axios-config';
+
 
 export default {
+
 	name: 'assign-role',
+
 	mixins: [mixin],
+
 	data() {
+
 		return {
+
 			role: {
+
 				id: 0,
 				role_name: '',
 				menus: [],
 			},
+
+
+
 			errors: null
+
 		}
+
 	},
+
 	created() {
+
 		let vm = this;
 
-        EventBus.on('assign-permission', function (id) {
+		EventBus.$on('assign-permission', function (id) {
+
 			vm.role.id = id;
+
 			vm.RoleInfo(id);
 			vm.getMenus(id);
+
 			$('#assign-role').modal('show');
+
 		});
 
 		$('#assign-role').on('hidden.bs.modal', function () {
 			vm.closeModal();
 		});
+
+
+
 	},
+
 	methods: {
+
 		RoleInfo(id) {
+
 			axios.get(base_url + 'role/' + id + '/edit')
+
 				.then(response => {
 					this.role.id = response.data.id;
 					this.role.role_name = response.data.role_name;
 				})
+
 		},
+
 		getMenus(id) {
+
 			axios.get(base_url + 'role/' + id)
+
 				.then(response => {
+
 					this.role.menus = response.data;
 				})
+
 		},
 		AssignRole() {
+
 			axios.post(base_url + 'permission', this.role)
 				.then(res => {
-					if (res.data.status === 'success') {
-						this.successAlert(res.data);
-						EventBus.emit('role-created', 1);
+
+					console.log(res);
+
+					if (res.data.status == 'success') {
+						this.successALert(res.data);
+						EventBus.$emit('role-created', 1);
 						this.closeModal();
 						$('#assign-role').modal('hide');
 					}
 				})
 				.catch(err => {
+
 					if (err.response) {
+
 						this.errors = err.response.data.errors;
 					}
 				})
+
 		},
+
+
+
 		closeModal() {
-			EventBus.emit('role-created', 1);
+			EventBus.$emit('role-created', 1);
 		}
+
+
+
+
 	}
+
 }
+
+
+
 </script>

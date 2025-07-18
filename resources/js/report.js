@@ -1,7 +1,6 @@
-import { createApp } from 'vue'
+require('./vue-asset');
 import ReportForm from "./components/report/ReportForm.vue";
 
-const app = createApp({});
+Vue.component('report-form', ReportForm);
 
-app.component('report-form', ReportForm);
-app.mount('#inventory');
+var app = new Vue({el: '#inventory'});

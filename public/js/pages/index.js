@@ -16,10 +16,6 @@
 
 var realtime = 'on';
 function initRealTimeChart() {
-    if ($("#real_time_chart").length === 0) {
-        return;
-    }
-
     //Real time ==========================================================================================
     var plot = $.plot('#real_time_chart', [getRandomData()], {
         series: {
@@ -73,10 +69,6 @@ function initSparkline() {
 }
 
 function initDonutChart() {
-    if ($("#donut_chart").length === 0) {
-        return;
-    }
-
     Morris.Donut({
         element: 'donut_chart',
         data: [{

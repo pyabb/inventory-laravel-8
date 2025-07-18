@@ -1,9 +1,8 @@
-import { createApp } from 'vue';
+require('./vue-asset');
 import CreateInvoice from "./components/invoice/CreateInvoice.vue";
 import ViewInvoice from "./components/invoice/ViewInvoice.vue";
 
-const app = createApp({});
+Vue.component('create-invoice', CreateInvoice);
+Vue.component('view-invoice', ViewInvoice);
 
-app.component('create-invoice', CreateInvoice);
-app.component('view-invoice', ViewInvoice);
-app.mount('#inventory');
+var app = new Vue({el: '#inventory'});

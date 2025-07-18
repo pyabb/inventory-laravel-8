@@ -1,9 +1,8 @@
-import { createApp } from "vue";
+require('./vue-asset');
 import CreateRole from "./components/role/CreateRole.vue";
 import ViewRole from "./components/role/ViewRole.vue";
 
-const app = createApp({});
+Vue.component('create-role', CreateRole);
+Vue.component('view-role', ViewRole);
 
-app.component('create-role', CreateRole);
-app.component('view-role', ViewRole);
-app.mount('#inventory');
+var app = new Vue({el: '#inventory'});

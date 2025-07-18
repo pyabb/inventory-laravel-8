@@ -20,7 +20,9 @@
                     </button>
                 </h2>
             </div>
+
             <view-vendor></view-vendor>
+
         </div>
     </div>
 </div>
@@ -28,5 +30,7 @@
 @endsection
 
 @push('script')
-    @vite('resources/js/vendor.js')
+
+<script type="text/javascript" src="{{ asset('/js/vendor.js') }}"></script>
+
 @endpush

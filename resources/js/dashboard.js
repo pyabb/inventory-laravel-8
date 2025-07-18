@@ -1,5 +1,6 @@
-import { createApp } from 'vue';
-import App from './components/dashboard/InfoBox.vue';
+require('./vue-asset');
+import InfoBox from './components/dashboard/InfoBox.vue';
 
-const app = createApp(App);
-app.mount('#inventory');
+Vue.component('info-box', InfoBox);
+
+var app = new Vue({el: '#inventory'});

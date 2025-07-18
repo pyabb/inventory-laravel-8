@@ -1,7 +1,0 @@
-.git
-node_modules
-vendor
-tests
-.env
-Dockerfile
-docker-compose.yml

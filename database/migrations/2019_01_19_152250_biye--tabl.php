@@ -13,11 +13,11 @@ class BiyeTabl extends Migration
      */
     public function up()
     {
-        Schema::create('biye', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('designation');
-            $table->string('address');
+            Schema::create('biye', function (Blueprint $table) {
+           $table->increments('id');
+          $table->string('name');
+          $table->string('designation');
+          $table->string('address');
         });
     }
 
@@ -28,6 +28,6 @@ class BiyeTabl extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('biye');
+        //
     }
 }
