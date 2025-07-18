@@ -1,52 +1,60 @@
-ARG PHP_VERSION=7.4.33-cli-bullseye
-FROM php:${PHP_VERSION}
+### STAGE 1: Build de frontend con Node 22 y Vite
+FROM node:22-alpine AS node_build
 
-RUN apt-get update && apt-get install tzdata
+WORKDIR /app
 
-ENV TZ=America/Lima
+# Copiar necessary files to build Vite assets
+COPY package*.json vite.config.* ./
+COPY resources resources
 
-RUN cp /usr/share/zoneinfo/America/Lima /etc/localtime
-RUN echo "America/Lima" >  /etc/timezone
+# Install dependencies and compile assets
+RUN npm install && npm run build
 
-RUN apt-get install -y libicu-dev libpng-dev libfreetype-dev libjpeg62-turbo-dev libzip-dev
-RUN docker-php-ext-configure intl && docker-php-ext-install intl
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install gd
 
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install pdo_mysql
+### STAGE 2: Build de PHP + Composer
+FROM php:8.2-fpm-alpine3.21 AS php_build
 
-ARG USERNAME=appuser
-RUN groupadd -g 1000 ${USERNAME} \
-    && useradd -u 1000 -g ${USERNAME} -m -s /sbin/nologin ${USERNAME}
+RUN apk add --no-cache \
+    libpng-dev libjpeg-turbo-dev freetype-dev icu-dev libzip-dev \
+    oniguruma-dev git bash curl
 
-# If you need to install Composer, uncomment the following lines of code, then update the Composer file hash from:
-# https://getcomposer.org/download/
+# Install necessary PHP extensions
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install intl gd zip pdo_mysql
 
-#ARG COMPOSER_FILE_HASH=dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6
-#RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-#RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '${COMPOSER_FILE_HASH}') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-#RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-#RUN php -r "unlink('composer-setup.php');"
+# Install Composer
+COPY --from=composer:2.2.20 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
+WORKDIR /app
+COPY . .
 
-# Download and install nvm and node using .tar file:
-ARG NODE=node-v14.21.3-linux-x64.tar.xz
-COPY tmp/${NODE} /tmp
-RUN tar -xJf /tmp/${NODE} -C /usr/local --strip-components=1
-RUN rm /tmp/${NODE}
+# Remove unnecessary node_build files and install composer dependencias
+RUN rm -rf node_modules \
+    package*.json \
+    vite.config.* \
+    resources/js \
+    resources/css \
+    resources/sass \
+    resources/ts \
+    && composer install --no-dev --optimize-autoloader
 
-# Download and install nvm and node using deprecated script:
-#RUN apt-get update && apt-get install -y \
-#    gnupg2 \
-#    && curl -fsSL https://deb.nodesource.com/setup_12.x | bash - \
-#    && apt-get install -y nodejs \
-#    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy migration script
-COPY init.sh /usr/local/bin/init.sh
+### STAGE 3: Final production only with PHP and assets
+FROM dunglas/frankenphp:php8.2-alpine
 
-# Dar permisos de ejecución al script
-RUN chmod +x /usr/local/bin/init.sh
+RUN install-php-extensions \
+	pdo_mysql \
+	gd \
+	intl \
+	zip \
+	opcache
 
-USER ${USERNAME}
+# Copy proyect code
+WORKDIR /app
+COPY --from=php_build /app /app
+
+# Copy assets
+COPY --from=node_build /app/public/build /var/www/html/public/build
+
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
